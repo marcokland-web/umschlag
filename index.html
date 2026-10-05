@@ -175,6 +175,18 @@ body{font-variant-numeric:tabular-nums}
 .sbh aside{width:58px;padding:12px 6px}.sbh .lb,.sbh .pt,.sbh .plan i,.sbh .sec,.sbh .bal,.sbh .lsync{display:none}
 .sbh .nav,.sbh .sbtn,.sbh .acc,.sbh .plan{justify-content:center;padding:9px 0}.sbh .plan .ic.lg{margin:0}.sbh .acc .ic{display:inline-grid}.sbh .scol{align-self:center;margin:6px 0 0}.sbh .hb{display:none}.nm [data-a=egrp]{grid-column:3}.nm .pl{grid-column:4}
 .acc{padding:5px 8px 5px 12px}.ph .pill{min-width:78px}
+.quick{flex:1;min-height:0;display:flex;flex-direction:column;gap:7px;padding:2px 14px 0}.qt{font-size:20px;font-weight:600}
+.qseg{display:flex;background:var(--pill);border-radius:12px;padding:3px}.qseg button{flex:1;padding:7px;border-radius:10px;font-weight:600;color:var(--mut);font-size:14px}.qseg .on{background:var(--card);color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.2)}.qseg .on.in{color:#3fa060}
+.qamtw{text-align:center;min-height:62px;display:flex;flex-direction:column;justify-content:center}.qexp{font-size:13px;color:var(--mut);min-height:16px}.qamt{font-size:44px;font-weight:600;line-height:1.05;white-space:nowrap;overflow:hidden}.qamt.ph0{color:var(--mut);opacity:.5}.qamt.in{color:#4cb86a}
+.qin{width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--tx);font-size:16px}
+.qps,.qcats{display:flex;flex-wrap:wrap;gap:6px}.qps:empty{display:none}
+.qc2{padding:6px 10px;border-radius:16px;background:var(--pill);font-size:12.5px;color:var(--tx)}.qc2.on{background:var(--acc);color:#fff}.qc2.more{color:var(--acc)}.qcats.err{outline:2px solid var(--r);border-radius:12px;padding:4px}
+.qrow{display:flex;gap:6px}.qd{position:relative;flex:1;min-width:0;padding:9px 6px;border-radius:12px;background:var(--pill);font-size:13px;text-align:center;overflow:hidden;white-space:nowrap;color:var(--tx)}.qd span{display:block;overflow:hidden;text-overflow:ellipsis}.qd select,.qd input{position:absolute;inset:0;opacity:0;width:100%;height:100%}
+.qkp{flex:1;min-height:150px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:6px}.qkp button{font-size:24px;border-radius:12px;background:var(--card);color:var(--tx);border:1px solid var(--line);font-weight:500}.qkp .op{color:var(--acc);font-weight:600}
+.qsave{padding:14px;border-radius:14px;background:var(--acc);color:#fff;font-size:17px;font-weight:600}.qsave.off{opacity:.45}
+body.kb .qkp,body.kb .qsave,body.kb .pbar{display:none}
+.qsheet{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.4);display:flex;align-items:flex-end}.qsheet>div{background:var(--card);width:100%;max-height:80%;overflow:auto;border-radius:18px 18px 0 0;padding:14px}
+.toast{position:fixed;left:16px;right:16px;top:calc(54px + env(safe-area-inset-top,0px));z-index:45;background:#23252f;color:#fff;border-radius:14px;padding:12px 14px;display:flex;justify-content:space-between;gap:10px;font-size:14px}.toast button{color:#9fa8ff;font-weight:600}
 </style></head><body>
 <div id="app"></div><div id="pad"></div><input type="file" id="impplan" accept=".json" hidden>
 <script>
@@ -300,8 +312,8 @@ function sideHTML(){const tot=S.accounts.reduce((s,a)=>s+accBal(a.id),0),nv=(k,i
  <div class="sec" data-a="cash" style="cursor:pointer"><span>⌄ CASH</span><span>${F(tot)}</span></div>${S.accounts.map(a=>`<button class="acc${UI.view==='acc'&&UI.acc===a.id?' on':''}" data-a="nav" data-v="acc" data-i="${a.id}" title="${esc(a.name)}"><span class="ic">${esc((a.name||'?')[0])}</span><span class="lb">${esc(a.name)}</span><span class="bal">${F(accBal(a.id))}</span></button>`).join('')}
  <button class="sbtn" data-a="newacc" title="Add Account"><span class="ic">⊕</span><span class="lb">Add Account</span></button><button class="sbtn" data-a="bank" title="Bank Connections"><span class="ic">🏛</span><span class="lb">Bank Connections</span></button><div class="lsync" id="gdl">${gSyncTxt()}</div><button class="scol" data-a="side" title="${gT('Seitenleiste ein-/ausklappen','Collapse/expand sidebar')}">${UI.sbHide?'»':'«'}</button></aside>`}
 function render(){const a=document.activeElement;const keep=a&&a.id;
- let main;if(UI.view==='plan')main=planHTML();else if(UI.view==='acc')main=accHTML();else if(UI.view==='home')main=homeHTML();else main=`<div class="top"><button class="hb" data-a="side">☰</button><div class="hd" style="padding:0">Reflect</div><div class="mnav"><button class="circ" data-a="mo" data-d="-1">‹</button><b>${ml(UI.month)}</b><button class="circ" data-a="mo" data-d="1">›</button></div></div>${reflect()}`;
- $app.innerHTML=sideHTML()+`<main>${isTab()?tnavHTML():''}${main}</main>`+modalHTML()+(isPhone()?pbarHTML():'');if(isTab())$app.querySelectorAll('input[inputmode=decimal]').forEach(i=>{i.setAttribute('inputmode','none');i.dataset.num=1});$app.className=(isTab()?'tab ':'')+(isPhone()?'ph ':'')+(UI.fl?'fl ':'')+(UI.dense?'dense ':'')+(UI.hide?'hideamt ':'')+(UI.pb?'':'nopb ')+(UI.sbHide&&!isTab()&&innerWidth>860?'sbh':'');document.documentElement.style.setProperty('--la',JSON.stringify(gT('Zugewiesen','Assigned')));document.documentElement.style.setProperty('--lv',JSON.stringify(gT('Verfügbar','Available')));trDom($app);padRender();fitAmounts();document.title=LANG==='de'?'Marcos Plan | YNAB':"Marco's Plan | YNAB";
+ let main;if(UI.view==='plan')main=planHTML();else if(UI.view==='acc')main=accHTML();else if(UI.view==='home')main=homeHTML();else if(UI.view==='quick')main=quickHTML();else main=`<div class="top"><button class="hb" data-a="side">☰</button><div class="hd" style="padding:0">Reflect</div><div class="mnav"><button class="circ" data-a="mo" data-d="-1">‹</button><b>${ml(UI.month)}</b><button class="circ" data-a="mo" data-d="1">›</button></div></div>${reflect()}`;
+ $app.innerHTML=sideHTML()+`<main>${isTab()?tnavHTML():''}${main}</main>`+modalHTML()+(isPhone()?pbarHTML():'');if(isTab())$app.querySelectorAll('input[inputmode=decimal]').forEach(i=>{i.setAttribute('inputmode','none');i.dataset.num=1});$app.className=(isTab()?'tab ':'')+(isPhone()?'ph ':'')+(UI.fl?'fl ':'')+(UI.dense?'dense ':'')+(UI.hide?'hideamt ':'')+(UI.pb?'':'nopb ')+(UI.sbHide&&!isTab()&&innerWidth>860?'sbh':'');document.documentElement.style.setProperty('--la',JSON.stringify(gT('Zugewiesen','Assigned')));document.documentElement.style.setProperty('--lv',JSON.stringify(gT('Verfügbar','Available')));trDom($app);padRender();fitAmounts();if(!(document.activeElement&&/^(qp|qm)$/.test(document.activeElement.id)))document.body.classList.remove('kb');document.title=LANG==='de'?'Marcos Plan | YNAB':"Marco's Plan | YNAB";
  const i=document.getElementById('ai');if(i){i.focus();i.select()}
  const mi=document.getElementById('mi');if(mi&&UI.modal){mi.focus();mi.select?.()}}
 const PAL=['#2a2ac2','#3ba1e8','#4cb86a','#f5b731','#ef7b45','#d44a8c','#8a5cd6','#57606f'];
@@ -386,6 +398,13 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');cons
  if(a==='ttt'){UI.modal.tt=d.v;UI.modal.v0=document.getElementById('mi').value;return render()}
  if(a==='tpl'){UI.modal={t:'tpl'};return render()}
  if(a==='tpld')return tplAction(d.v);
+ if(a==='qtype'){Q.type=d.v;if(d.v==='in'&&!Q.catManual)Q.cat=null;else autoCat();return render()}
+ if(a==='qk')return qKey(d.k);
+ if(a==='qcat'){Q.cat=d.c||null;Q.catManual=true;UI.qsheet=false;UI.qerr=0;return render()}
+ if(a==='qmore'){UI.qsheet=true;return render()}
+ if(a==='qsx'){if(e.target===el){UI.qsheet=false;render()}return}
+ if(a==='qmemo'){Q.showMemo=!Q.showMemo;return render()}
+ if(a==='qpay'){Q.payee=d.p;autoCat();return render()}
  if(a==='emo'){UI.modal.emoji=d.e;UI.modal.nm=document.getElementById('mi').value;return render()}
  if(a==='eicon'){if(isTab()){UI.sel=d.c;padOpen({c:d.c});return render()}UI.modal={t:'cat',id:d.c};return render()}
  if(a==='sugp'){const sel=document.getElementById('n-cat');if(sel)sel.value=d.c;return}
@@ -397,7 +416,7 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');cons
  if(a==='voice')return voice();
  if(a==='photo'){document.getElementById('ph').click();return}
  if(a==='fl'){UI.fl=!UI.fl;return render()}
- if(a==='txnew'){UI.view='acc';UI.acc='all';UI.adding=true;UI.txedit=null;PAD=null;return render()}
+ if(a==='txnew'){UI.view=isPhone()?'quick':'acc';UI.acc='all';UI.adding=true;UI.txedit=null;PAD=null;return render()}
  if(a==='pk')return padKey(d.k);
  if(a==='px'){PAD=null;return padRender()}
  if(a==='pq'){PAD.expr='';PAD.res=false;const v=+d.v;return commit(()=>{S.assigned[PAD.c+'|'+UI.month]=v})}
@@ -407,7 +426,7 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');cons
  if(a==='gd'){if(gSt==='unavail'){UI.modal={t:'info',h:gT('Google Drive Sync','Google Drive sync'),p:gT('Der Sync funktioniert nur auf deiner eigenen Seite (GitHub Pages), nicht in dieser Vorschau.','Sync only works on your own site (GitHub Pages), not in this preview.')};return render()}lsSet('gd-on','1');if(gSt==='off')gStatus('paused');return gSync()}
  if(a==='gdoff'){lsDel('gd-on');lsDel('gd-fid');gTok=null;gStatus('off');return render()}
  if(a==='lang'){LANG=LANG==='de'?'en':'de';try{localStorage.setItem('ynab-lang',LANG)}catch(e){}MN=LANG==='de'?MND:MNE;migrate();return render()}
- if(a==='undo')return undo();if(a==='redo')return redoF();
+ if(a==='undo'){UI.toast=null;return undo()}if(a==='redo')return redoF();
  if(a==='recent'){UI.modal={t:'info',h:'Recent Moves',p:'Every change to Assigned amounts appears here in YNAB. Use Undo / Redo to step back through the last changes.'};return render()}
  if(a==='bank'){UI.modal={t:'info',h:'Bank Connections',p:'Bank sync is not available in this replica. Use Add Transaction or File Import in All Accounts.'};return render()}
  if(a==='newacc'){UI.modal={t:'acct'};return render()}
@@ -524,12 +543,12 @@ function padHTML(){const P=PAD,m=UI.month;let head,chips='',cur=padCur();
  return`<div class="pw"><div>${head}</div><div><div class="pd">${disp}</div>${chips}</div><div class="kp">${keys.map(([k,l])=>`<button data-a="pk" data-k="${k}">${l}</button>`).join('')}<button data-a="pk" data-k="c">C</button><button data-a="pk" data-k="=">=</button><button class="dn" data-a="pk" data-k="done">${gT('Fertig','Done')}</button></div></div><button class="px" data-a="px" style="position:absolute;left:10px;top:-14px">✕</button>`}
 function padRender(){const el=document.getElementById('pad');if(!el)return;el.className=PAD?'on':'';document.body.classList.toggle('pado',!!PAD);el.innerHTML=PAD?padHTML():'';{const pdv=el.querySelector('.pd');if(pdv){let f=24;pdv.style.fontSize=f+'px';while(pdv.scrollWidth>pdv.clientWidth&&f>11){f--;pdv.style.fontSize=f+'px'}}}document.documentElement.style.setProperty('--padh',PAD?el.offsetHeight+'px':'0px')}
 document.addEventListener('click',e=>{const t=e.target;if(t.dataset&&t.dataset.num&&t.id){t.blur();padOpen({f:t.id,lab:t.placeholder||''})}},true);
-document.addEventListener('input',e=>{if(e.target.id==='mn'){S.notes=S.notes||{};S.notes[UI.month]=e.target.value;save();return}if(e.target.id==='q'){UI.q=e.target.value;render();const q=document.getElementById('q');q.focus();q.setSelectionRange(q.value.length,q.value.length);return}if(e.target.id==='n-pay'){const el=document.getElementById('sug');if(el)el.innerHTML=sugHTML(e.target.value);return}if(e.target.id==='pn'){const c=findCat(e.target.dataset.c);if(c){c.note=e.target.value;save()}}});
+document.addEventListener('input',e=>{if(e.target.id==='mn'){S.notes=S.notes||{};S.notes[UI.month]=e.target.value;save();return}if(e.target.id==='q'){UI.q=e.target.value;render();const q=document.getElementById('q');q.focus();q.setSelectionRange(q.value.length,q.value.length);return}if(e.target.id==='qp'){Q.payee=e.target.value;autoCat();qPart();return}if(e.target.id==='qm'){Q.memo=e.target.value;return}if(e.target.id==='n-pay'){const el=document.getElementById('sug');if(el)el.innerHTML=sugHTML(e.target.value);return}if(e.target.id==='pn'){const c=findCat(e.target.dataset.c);if(c){c.note=e.target.value;save()}}});
 const isPhone=()=>isTab()&&innerWidth<=600;
-function ptopHTML(){const m=UI.month;return`<div class="ptop"><div class="tl"><button data-a="undo">↶</button><button data-a="fl">≡</button></div><label class="pm">${ml(m)} ⌄<input id="mpk" type="month" value="${m.slice(0,4)}-${m.slice(4)}"></label><div class="tm"><button data-a="side">⋯</button></div></div>`}
+function ptopHTML(){if(UI.view==='quick')return`<div class="ptop"><div class="qt">${gT('Neue Buchung','New transaction')}</div><div class="tm"><button data-a="voice">${UI.listen?'🎙':'🎤'}</button><button data-a="photo">📷</button><button data-a="side">⋯</button></div></div><input type="file" id="ph" accept="image/*" hidden>`;const m=UI.month;return`<div class="ptop"><div class="tl"><button data-a="undo">↶</button><button data-a="fl">≡</button></div><label class="pm">${ml(m)} ⌄<input id="mpk" type="month" value="${m.slice(0,4)}-${m.slice(4)}"></label><div class="tm"><button data-a="side">⋯</button></div></div>`}
 function pbarHTML(){const m=UI.month,over=cats().filter(c=>avail(c.id,m)<0).length,unc=S.tx.filter(t=>!t.cl).length,cur=UI.view==='ref'||UI.view==='spend'?(UI.rt==='spend'?'spend':'ref'):UI.view;
- const V=[['home','🏠',gT('Start','Home'),over],['plan','🗂️','Plan',0],['spend','💵',gT('Ausgaben','Spending'),0],['acc','🏛️',gT('Konten','Accounts'),unc],['ref','📊',gT('Analyse','Reflect'),0]];
- return`<button class="fab" data-a="txnew">＋ ${gT('Buchung','Transaction')}</button><div class="pbar">${V.map(([k,i,l,b])=>`<button class="${cur===k?'on':''}" data-a="nav" data-v="${k}"><span class="ic">${i}</span>${l}${b?`<i class="bg">${b}</i>`:''}</button>`).join('')}</div>`}
+ const V=[['quick','➕',gT('Erfassen','Add'),0],['acc','🏛️',gT('Buchungen','Ledger'),unc],['plan','🗂️','Plan',over],['spend','💵',gT('Ausgaben','Spending'),0],['ref','📊',gT('Analyse','Reflect'),0]];
+ return`${UI.view==='quick'?'':`<button class="fab" data-a="txnew">＋ ${gT('Buchung','Transaction')}</button>`}<div class="pbar">${V.map(([k,i,l,b])=>`<button class="${cur===k?'on':''}" data-a="nav" data-v="${k}"><span class="ic">${i}</span>${l}${b?`<i class="bg">${b}</i>`:''}</button>`).join('')}</div>`}
 let lastPh=isPhone();addEventListener('resize',()=>{if(isPhone()!==lastPh){lastPh=isPhone();render()}});
 const selCats=()=>{const l=cats().filter(c=>UI.ck[c.id]);return l.length?l:cats()};
 function tgInfo(c,m){const bar=(p,k)=>`<i class="pbt"><i class="pb ${k}" style="width:${p}%"></i></i>`;if(!c.target||(c.snooze||[]).includes(m))return bar(0,'');
@@ -580,7 +599,7 @@ function tplAction(mode){const mo=mode==='next'?shift(mk(TODAY),1):mk(TODAY);
   const dead=['Bills','Needs','Wants','Rechnungen','Notwendiges','Wünsche'];
   S.groups=S.groups.filter(g=>!dead.includes(g.name)||g.cats.some(c=>S.tx.some(t=>t.cat===c.id)||Object.keys(S.assigned).some(k=>k.startsWith(c.id+'|')&&S.assigned[k])));
   S.payees=PAYEES;UI.modal=null;if(mode!=='none')UI.month=mo})}
-document.addEventListener('change',e=>{if(e.target.id==='n-pay'){const g=sugg(e.target.value)[0],c=g&&(g.why==='hist'||g.why==='rule')?g.id:null,sel=document.getElementById('n-cat');if(c&&sel&&!sel.value)sel.value=c}if(e.target.id==='ph'&&e.target.files[0]){photoScan(e.target.files[0]);e.target.value=''}});
+document.addEventListener('change',e=>{if(e.target.id==='qacc'){Q.acc=e.target.value;lsSet('ynab-lastacc',Q.acc);render();return}if(e.target.id==='qdate'){Q.date=e.target.value||TODAY;Q.dm=Q.date!==TODAY;render();return}if(e.target.id==='n-pay'){const g=sugg(e.target.value)[0],c=g&&(g.why==='hist'||g.why==='rule')?g.id:null,sel=document.getElementById('n-cat');if(c&&sel&&!sel.value)sel.value=c}if(e.target.id==='ph'&&e.target.files[0]){photoScan(e.target.files[0]);e.target.value=''}});
 UI.pb=lsGet('ynab-pb')!=='0';
 const KW=[[/lidl|edeka|kaufland|rewe|aldi|netto|penny|\bdm\b|rossmann|müller/i,'Lebensmittel & Drogerie'],[/mcdonald|burger king|kfc|subway|domino|pizza|restaurant|imbiss|caf[eé]|bäcker|döner/i,'Auswärts Essen & Fast Food'],[/aral|shell|esso|\bjet\b|total|tankstelle|parkhaus|parken|\batu\b/i,'Tanken, Parken & Auto'],[/amazon|decathlon|shein|zalando|h&m|otto|ebay/i,'Shopping & Kleidung'],[/apple|\bwow\b|netflix|disney|spotify|prime video|dazn|\bsky\b/i,'Abonnements & Streaming'],[/apotheke|arzt|praxis|zahnarzt|klinik|\bpvs\b|\bpas\b/i,'Gesundheit & Arzt'],[/\bmsc\b|\btui\b|camping|booking|airbnb|hotel|lufthansa|ryanair/i,'Urlaub & Reisen'],[/kino|therme|bowling|\bzoo\b|freizeitpark/i,'Ausflüge & Freizeit'],[/trade republic|scalable|etf|sparplan/i,'ETF- & Aktien-Sparpläne']];
 function sugg(p){p=(p||'').trim().toLowerCase();const out=[],add=(id,why)=>{if(id&&!out.some(o=>o.id===id))out.push({id,why})};
@@ -602,7 +621,7 @@ function parseBank(t){const rows=[],dre=/(\d{1,2})\.(\d{1,2})\.(\d{2,4})/;
 function pasteHTML(){const M=UI.modal;
  if(!M.rows)return`<h4>${gT('Kontobewegungen einfügen','Paste transactions')}</h4><p class="sl">${gT('Kopiere Umsätze aus dem Online-Banking (eine Buchung pro Zeile mit Datum, Empfänger und Betrag) und füge sie hier ein.','Paste bank lines (one per row: date, payee, amount).')}</p><textarea id="pt" style="width:100%;height:180px;border:2px solid var(--acc);border-radius:8px;padding:8px;background:var(--card);color:var(--tx);font:inherit"></textarea><div class="mb"><span class="sp"></span><button class="lk" data-a="mx">${gT('Abbrechen','Cancel')}</button><button class="btn" data-a="pparse">${gT('Analysieren','Analyze')}</button></div>`;
  return`<h4>${M.rows.length} ${gT('Buchungen erkannt','transactions found')}</h4><select id="pacc" style="margin-bottom:8px;padding:6px">${S.accounts.map(a=>`<option value="${a.id}" ${a.id===UI.acc?'selected':''}>${esc(a.name)}</option>`).join('')}</select><div style="max-height:46vh;overflow:auto">${M.rows.map((r,i)=>`<div class="prow${r.dup?' dup':''}"><input type="checkbox" data-pk="${i}" ${r.on?'checked':''}><span>${dd(r.date)}</span><span class="pp" title="${esc(r.memo)}">${esc(r.payee)}${r.dup?' ('+gT('Duplikat','duplicate')+')':''}</span><b>${F(r.in-r.out)}</b><select data-pc="${i}"><option value="">${r.in?gT('Zuweisbar (Einnahme)','Ready to Assign'):'—'}</option>${catOpts(r.cat)}</select></div>`).join('')}</div><div class="mb"><span class="sp"></span><button class="lk" data-a="mx">${gT('Abbrechen','Cancel')}</button><button class="btn" data-a="pgo">${gT('Importieren','Import')}</button></div>`}
-function fillFrom(o){UI.view='acc';UI.acc='all';UI.adding=true;UI.txedit=null;UI.listen=false;UI.pre=o;render()}
+function fillFrom(o){if(isPhone()){Object.assign(Q,{type:o.in?'in':'out',expr:String(o.in||o.out||''),payee:o.payee||'',cat:o.cat||null,catManual:!!o.cat,date:o.date||TODAY,dm:!!o.date&&o.date!==TODAY,memo:o.memo||''});UI.view='quick';UI.listen=false;UI.modal=null;render();return}UI.view='acc';UI.acc='all';UI.adding=true;UI.txedit=null;UI.listen=false;UI.pre=o;render()}
 function parseVoice(t){const l=t.toLowerCase();let v=0,m;
  if(m=l.match(/(\d+)[,.](\d{1,2})/))v=+(m[1]+'.'+m[2].padEnd(2,'0'));else if(m=l.match(/(\d+)\s*(?:euro|€)\s*(?:und\s*)?(\d{1,2})\b/))v=+(m[1]+'.'+m[2].padStart(2,'0'));else if(m=l.match(/(\d+)/))v=+m[1];
  const inn=/einnahme|gehalt|erhalten|bekommen|eingang|gutschrift|erstattung/.test(l);
@@ -634,8 +653,46 @@ function fitAmounts(){const rg=document.createRange(),w=c=>{rg.selectNodeContent
   cols.forEach(n=>{need[n]=Math.max(def[n],...rows.map(r=>r.children[n-1]?w(r.children[n-1])+(n===4?12:8):0))});
   const tot=cols.reduce((a,n)=>a+need[n],0),budget=Math.max(180,t.clientWidth*(ph?.66:.52)),f=tot>budget?Math.max(.66,budget/tot):1;
   t.style.setProperty('--nf',f);cols.forEach(n=>t.style.setProperty('--c'+n,Math.ceil(need[n]*f)+'px'))}}
+ const qa=document.querySelector('.qamt');if(qa){let f=44;qa.style.fontSize=f+'px';while(qa.scrollWidth>qa.clientWidth&&f>18){f-=2;qa.style.fontSize=f+'px'}}
  const r2=document.querySelector('.reg');if(r2){r2.style.removeProperty('--rw');r2.style.setProperty('--rw',Math.max(100,...[...r2.querySelectorAll('.tr span.r')].map(w))+12+'px')}}
 let rzT;addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(fitAmounts,120)});if(document.fonts)document.fonts.ready.then(fitAmounts);
+const Q={type:'out',expr:'',payee:'',cat:null,catManual:false,acc:null,date:TODAY,dm:false,memo:'',showMemo:false};let tT;
+const ymd=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+function autoCat(){if(Q.catManual||Q.type==='in')return;const g=sugg(Q.payee).filter(o=>o.why!=='freq')[0];Q.cat=g?g.id:null}
+function payeeList(q){q=q.toLowerCase();const n={};S.tx.forEach(t=>{if(t.payee&&t.payee!=='Starting Balance'&&t.payee!=='Unknown')n[t.payee]=(n[t.payee]||0)+1});(S.payees||[]).forEach(x=>{n[x]=n[x]||0});return Object.keys(n).filter(x=>!q||x.toLowerCase().includes(q)).sort((a,b)=>n[b]-n[a]||a.localeCompare(b)).slice(0,5)}
+function qCatsHTML(){const L=[],add=id=>{const c=findCat(id);if(c&&!c.hidden&&!L.includes(id))L.push(id)};
+ if(Q.cat)add(Q.cat);sugg(Q.payee).forEach(o=>add(o.id));const n={};S.tx.forEach(t=>{if(t.cat)n[t.cat]=(n[t.cat]||0)+1});Object.keys(n).sort((a,b)=>n[b]-n[a]).forEach(add);cats().forEach(c=>add(c.id));
+ return(Q.type==='in'?`<button class="qc2${Q.cat?'':' on'}" data-a="qcat" data-c="">↘ ${gT('Zuweisbar','Ready to Assign')}</button>`:'')+L.slice(0,4).map(id=>{const c=findCat(id);return`<button class="qc2${Q.cat===id?' on':''}" data-a="qcat" data-c="${id}">${c.emoji} ${esc(c.name)}</button>`}).join('')+`<button class="qc2 more" data-a="qmore">＋ ${gT('Alle','All')}</button>`}
+function qPart(){const ps=document.getElementById('qps');if(ps)ps.innerHTML=document.activeElement&&document.activeElement.id==='qp'?payeeList(Q.payee).map(x=>`<button class="qc2" data-a="qpay" data-p="${esc(x)}">${esc(x)}</button>`).join(''):'';const c=document.getElementById('qcats');if(c)c.innerHTML=qCatsHTML()}
+function quickHTML(){if(!Q.acc||!S.accounts.some(a=>a.id===Q.acc)){const l=lsGet('ynab-lastacc');Q.acc=S.accounts.some(a=>a.id===l)?l:S.accounts[0].id}
+ if(!Q.dm)Q.date=TODAY;const acc=S.accounts.find(a=>a.id===Q.acc),d=Q.date,y=ymd(new Date(Date.now()-864e5)),lab=d===TODAY?gT('Heute','Today'):d===y?gT('Gestern','Yesterday'):dd(d);
+ const hasOp=/[+\-]/.test(Q.expr),v=ev(Q.expr),main=hasOp?F(v):(Q.expr?Q.expr.replace('.',',')+' €':'0,00 €'),sg=Q.expr?(Q.type==='in'?'+':'−'):'';
+ const K=[['7','7'],['8','8'],['9','9'],['bs','⌫','op'],['4','4'],['5','5'],['6','6'],['+','+','op'],['1','1'],['2','2'],['3','3'],['-','−','op'],['.',','],['0','0'],['00','00'],['=','=','op']];
+ return`<div class="quick"><div class="qseg"><button class="${Q.type==='out'?'on':''}" data-a="qtype" data-v="out">${gT('Ausgabe','Expense')}</button><button class="${Q.type==='in'?'on in':''}" data-a="qtype" data-v="in">${gT('Einnahme','Income')}</button></div>
+ <div class="qamtw"><div class="qexp">${hasOp?esc(Q.expr.replace(/\./g,',').replace(/-/g,'−')):''}</div><div class="qamt ${Q.type}${Q.expr?'':' ph0'}">${sg}${main}</div></div>
+ <input id="qp" class="qin" placeholder="${gT('Empfänger / Händler','Payee')}" value="${esc(Q.payee)}" autocomplete="off" autocapitalize="words"><div id="qps" class="qps"></div>
+ <div id="qcats" class="qcats${UI.qerr?' err':''}">${qCatsHTML()}</div>
+ <div class="qrow"><label class="qd"><span>🏦 ${esc(acc.name)}</span><select id="qacc">${S.accounts.map(a=>`<option value="${a.id}" ${a.id===Q.acc?'selected':''}>${esc(a.name)}</option>`).join('')}</select></label><label class="qd"><span>📅 ${lab}</span><input type="date" id="qdate" value="${d}"></label><button class="qd" data-a="qmemo">📝 ${gT('Notiz','Note')}</button></div>
+ ${Q.showMemo?`<input id="qm" class="qin" placeholder="${gT('Notiz','Note')}" value="${esc(Q.memo)}">`:''}
+ <div class="qkp">${K.map(([k,l,c])=>`<button class="${c||''}" data-a="qk" data-k="${k}">${l}</button>`).join('')}</div>
+ <button class="qsave${v?'':' off'}" data-a="qk" data-k="save">✓ ${gT('Speichern','Save')}</button></div>${UI.qsheet?qsheetHTML():''}${UI.toast?`<div class="toast"><span>${esc(UI.toast)}</span><button data-a="undo">↶ ${gT('Rückgängig','Undo')}</button></div>`:''}`}
+function qsheetHTML(){return`<div class="qsheet" data-a="qsx"><div><b>${gT('Kategorie wählen','Choose category')}</b>${S.groups.map(g=>`<div class="sl" style="margin:10px 0 4px">${esc(g.name)}</div><div class="qcats">${g.cats.filter(c=>!c.hidden).map(c=>`<button class="qc2${Q.cat===c.id?' on':''}" data-a="qcat" data-c="${c.id}">${c.emoji} ${esc(c.name)}</button>`).join('')}</div>`).join('')}</div></div>`}
+function qKey(k){if(k==='save')return qSave();const last=Q.expr.split(/[+\-]/).pop();
+ if(k==='bs')Q.expr=Q.expr.slice(0,-1);
+ else if(k==='='){Q.expr=Q.expr?String(ev(Q.expr)||''):''}
+ else if(k==='+'||k==='-'){if(!Q.expr)return;if(/[+\-]$/.test(Q.expr))Q.expr=Q.expr.slice(0,-1);Q.expr+=k}
+ else if(k==='.'){if(last.includes('.'))return;Q.expr+=last===''?'0.':'.'}
+ else{const dec=last.split('.')[1];if(dec!==undefined&&dec.length>=2)return;if(last==='0'&&k!=='00')Q.expr=Q.expr.slice(0,-1);if(last===''&&k==='00')k='0';Q.expr+=k}
+ render()}
+function qSave(){const v=ev(Q.expr);if(!v)return;if(Q.type==='out'&&!Q.cat){UI.qerr=1;return render()}UI.qerr=0;
+ const t={id:uid(),acc:Q.acc,date:Q.date,payee:Q.payee.trim()||'Unknown',cat:Q.cat||null,memo:Q.memo,out:Q.type==='out'?v:0,in:Q.type==='in'?v:0,cl:false},c=findCat(t.cat);lsSet('ynab-lastacc',Q.acc);
+ const msg='✓ '+F(v)+(Q.type==='in'?' ':' ')+(t.payee==='Unknown'?'':t.payee)+(c?' · '+c.emoji+' '+c.name:'');
+ Object.assign(Q,{expr:'',payee:'',cat:null,catManual:false,memo:'',showMemo:false,date:TODAY,dm:false});
+ UI.toast=msg;clearTimeout(tT);tT=setTimeout(()=>{UI.toast=null;render()},4500);commit(()=>{S.tx.push(t)})}
+document.addEventListener('focusin',e=>{if(e.target.id==='qp'||e.target.id==='qm'){document.body.classList.add('kb');qPart()}});
+document.addEventListener('focusout',e=>{if(e.target.id==='qp'||e.target.id==='qm'){document.body.classList.remove('kb');const ps=document.getElementById('qps');if(ps)ps.innerHTML=''}});
+document.addEventListener('mousedown',e=>{if(document.body.classList.contains('kb')&&e.target.closest('.quick button,.qsheet button'))e.preventDefault()},true);
+if(isPhone())UI.view='quick';
 migrate();
 render();
 gInit();
