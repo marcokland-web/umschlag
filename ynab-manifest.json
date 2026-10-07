@@ -1,0 +1,22 @@
+{
+ "name": "Marcos Budget",
+ "short_name": "Budget",
+ "start_url": "./ynab.html",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#1c1c8f",
+ "theme_color": "#1c1c8f",
+ "icons": [
+  {
+   "src": "ynab-icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "ynab-icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any maskable"
+  }
+ ]
+}
