@@ -1,11 +1,11 @@
 {
- "name": "Marcos Budget",
- "short_name": "Budget",
+ "name": "B.A.S.E",
+ "short_name": "B.A.S.E",
  "start_url": "./ynab.html",
  "scope": "./",
  "display": "standalone",
- "background_color": "#1c1c8f",
- "theme_color": "#1c1c8f",
+ "background_color": "#6e1a35",
+ "theme_color": "#6e1a35",
  "icons": [
   {
    "src": "ynab-icon-192.png",
@@ -15,8 +15,7 @@
   {
    "src": "ynab-icon-512.png",
    "sizes": "512x512",
-   "type": "image/png",
-   "purpose": "any maskable"
+   "type": "image/png"
   }
  ]
 }
