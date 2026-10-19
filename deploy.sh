@@ -20,7 +20,7 @@ if git diff --cached --quiet; then
   exit 0
 fi
 BUILD=$(grep -o "const BUILD='[^']*'" ynab.html | cut -d"'" -f2)
-git commit -q -m "${1:-Update} (Build $BUILD)"
+git commit -q -m "${1:-Update} (Build $BUILD)" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 git pull -q --rebase origin main
 git push -q origin main
 echo "Hochgeladen: Build $BUILD → https://marcokland-web.github.io/umschlag/"
