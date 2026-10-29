@@ -1,21 +1,39 @@
 {
  "name": "B.A.S.E",
  "short_name": "B.A.S.E",
- "start_url": "./ynab.html",
+ "description": "Budget Aufsetzen, Strategisch Einteilen",
+ "lang": "de",
+ "dir": "ltr",
+ "id": "./",
+ "start_url": "./",
  "scope": "./",
  "display": "standalone",
- "background_color": "#6e1a35",
- "theme_color": "#6e1a35",
+ "background_color": "#FAF7F2",
+ "theme_color": "#5A1028",
  "icons": [
   {
    "src": "ynab-icon-192.png",
    "sizes": "192x192",
-   "type": "image/png"
+   "type": "image/png",
+   "purpose": "any"
   },
   {
    "src": "ynab-icon-512.png",
    "sizes": "512x512",
-   "type": "image/png"
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "ynab-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  },
+  {
+   "src": "ynab-icon.svg",
+   "sizes": "any",
+   "type": "image/svg+xml",
+   "purpose": "any"
   }
  ]
 }

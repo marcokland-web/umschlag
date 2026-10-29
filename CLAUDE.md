@@ -5,8 +5,8 @@ Veröffentlicht über GitHub Pages; die Hauptdatei muss im Repo `ynab.html` hei�
 
 ## Dateien
 - `ynab.html` – die komplette App (HTML, CSS, JS inline, ca. 240 KB). Hier passiert fast alles.
-- `ynab-sw.js` – Service Worker (Cache `base-v3`, HTML immer netzfrisch, `*.supabase.co` wird nicht gecacht).
-- `ynab-manifest.json` – PWA-Manifest. Icons: `ynab-icon-180/192/512.png`, `base-logo-512.png`.
+- `ynab-sw.js` – Service Worker (Cache `base-v4`, HTML immer netzfrisch, `*.supabase.co` wird nicht gecacht).
+- `ynab-manifest.json` – PWA-Manifest (`id`/`start_url` `./`, `lang` de). Icons aus DasTeam `studio/brand/base*.svg`: `ynab-icon-180.png` (Apple), `ynab-icon-192/512.png`, `ynab-maskable-512.png`, `ynab-favicon-32.png`, `ynab-icon.svg`, `base-logo-512.png`.
 - `base-supabase-schema.sql` – Tabellen + Row Level Security für Supabase (einmal im SQL Editor ausführen).
 
 ## Architektur von ynab.html
@@ -18,7 +18,10 @@ Veröffentlicht über GitHub Pages; die Hauptdatei muss im Repo `ynab.html` hei�
 - `save()` setzt `S.mod`, schreibt localStorage und stößt `sbPush()` an.
 - Layouts: `isTab()` (iPad/iPhone, grober Zeiger) und `isPhone()` (Breite <= 600). Ansichten für Touch in `PHV` (home, txl, accs, ref); Desktop nutzt `planHTML`/`accHTML`.
 - Übersetzung: `gT(de,en)` und `trDom()` (Wörterbuch für englische Template-Texte). Neue Texte mit `gT` schreiben.
-- Theme über CSS-Variablen (hell/dunkel/automatisch); `html.tabm` = cremige YNAB-Palette für Touch-Geräte.
+- Design nach Studio-Designsystem: Block „Studio-Designsystem“ am Ende des `<style>` überschreibt die alten Variablen (`--acc`, `--card` …) mit Bordeaux/Gold für `html.lt`/`html.dk`, Farbschleier, Liquid Glass nur für Navigation/Menüs. Systemschrift, keine Google Fonts.
+- Thema/Sprache in localStorage `studio-theme`/`studio-lang` (Rückfall auf `ynab-*`), Skript am Ende von `<head>` setzt sie vor dem ersten Zeichnen.
+- Einstellungen: `dispHTML()` (Darstellung, Sprache, Anzeige, Über), Zahnrad `gearB()` oben rechts, am Desktop auch unten in der Seitenleiste.
+- Diagrammfarben über CSS-Variablen `--c-in`, `--c-out`, `--c-hi`, `--c-lo`, `--c-2`, `--c-2lo`.
 - `BUILD`-Konstante (Version, auf der Startseite sichtbar) bei jeder Auslieferung hochzählen.
 
 ## Supabase-Sync
@@ -30,7 +33,7 @@ Veröffentlicht über GitHub Pages; die Hauptdatei muss im Repo `ynab.html` hei�
 - Offline funktioniert alles lokal (localStorage `ynab-nachbau-v1`), Sync läuft nach.
 
 ## Arbeitsweise / Wünsche des Nutzers (Marco)
-- Oberfläche auf Deutsch, schmale elegante Schrift, kompakt und dicht, exakt wie YNAB auf allen Geräten.
+- Oberfläche auf Deutsch, kompakt und dicht, Aufbau wie YNAB, Optik nach Studio-Designsystem (Bordeaux/Gold, Systemschrift).
 - Hell / Dunkel / Automatisch. iPhone startet direkt in der Schnelleingabe. Keine Sprach- oder Foto-Eingabe (funktionierte nicht).
 - Änderungen sollen sofort sichtbar sein: Cache-Busting, Version in `BUILD`, Service Worker no-store für HTML.
 - Nach jeder Änderung auf Desktop, iPad (820x1180) und iPhone (390x844) prüfen: Scrollen, Lesbarkeit, keine abgeschnittenen Listen.
