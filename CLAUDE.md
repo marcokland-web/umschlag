@@ -6,7 +6,7 @@ Veröffentlicht über GitHub Pages; die Hauptdatei muss im Repo `ynab.html` hei�
 ## Dateien
 - `ynab.html` – die komplette App (HTML, CSS, JS inline, ca. 240 KB). Hier passiert fast alles.
 - `ynab-sw.js` – Service Worker (Cache `base-v4`, HTML immer netzfrisch, `*.supabase.co` wird nicht gecacht).
-- `ynab-manifest.json` – PWA-Manifest (`id`/`start_url` `./`, `lang` de). Icons aus DasTeam `studio/brand/base*.svg`: `ynab-icon-180.png` (Apple), `ynab-icon-192/512.png`, `ynab-maskable-512.png`, `ynab-favicon-32.png`, `ynab-icon.svg`, `base-logo-512.png`.
+- `ynab-manifest.json` – PWA-Manifest (`id`/`start_url` `./`, `lang` de). Icons aus DasTeam `studio/brand/base*.svg`: `ynab-icon-180.png` (Apple), `ynab-icon-192/512.png`, `ynab-maskable-512.png`, `ynab-favicon-32.png`, `ynab-icon.svg`, `base-logo-512.png`. Icon-Adressen tragen `?v=2` (in `ynab.html` und Manifest); bei neuem Icon hochzählen, sonst behalten Browser und installierte App das alte.
 - `base-supabase-schema.sql` – Tabellen + Row Level Security für Supabase (einmal im SQL Editor ausführen).
 
 ## Architektur von ynab.html
