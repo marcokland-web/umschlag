@@ -12,25 +12,25 @@
  "theme_color": "#5A1028",
  "icons": [
   {
-   "src": "ynab-icon-192.png",
+   "src": "ynab-icon-192.png?v=2",
    "sizes": "192x192",
    "type": "image/png",
    "purpose": "any"
   },
   {
-   "src": "ynab-icon-512.png",
+   "src": "ynab-icon-512.png?v=2",
    "sizes": "512x512",
    "type": "image/png",
    "purpose": "any"
   },
   {
-   "src": "ynab-maskable-512.png",
+   "src": "ynab-maskable-512.png?v=2",
    "sizes": "512x512",
    "type": "image/png",
    "purpose": "maskable"
   },
   {
-   "src": "ynab-icon.svg",
+   "src": "ynab-icon.svg?v=2",
    "sizes": "any",
    "type": "image/svg+xml",
    "purpose": "any"
