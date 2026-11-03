@@ -620,6 +620,29 @@ html:root .sw:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 #app.tab:not(.ph) .dhead~.chips,#app.tab:not(.ph) .dhead~div>.chips:first-child{display:none}
 /* Zuweisen-Knopf in der Karte „Noch zu verteilen“ (iPad/iPhone) */
 html:root .tab .rta:is(.n,.z) .ab{display:none}html:root .tab .rta .ab{display:inline-flex;align-items:center;flex:none;margin-left:12px;min-height:40px;padding:0 14px;border-radius:999px;font-size:15px;font-weight:600}
+
+/* ===== Anmeldung mit Google (Knopf nach Googles Vorgaben) und Konto-Bereich ===== */
+.gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:44px;padding:0 16px 0 12px;border-radius:999px;background:#FFFFFF;border:1px solid #747775;color:#1F1F1F;font-size:15px;font-weight:600;letter-spacing:.01em;box-shadow:none}
+.gbtn svg{width:20px;height:20px;flex:none}
+html.dk .gbtn{background:#131314;border-color:#8E918F;color:#E3E3E3}
+.gbtn:disabled{opacity:.6;cursor:default}
+.gbtn:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.lgin p{margin:0 0 14px;color:var(--mut);font-size:15px;line-height:1.35}
+.lgin .lgerr{color:var(--danger);margin:12px 0 0;font-size:15px}
+.lgin .mb{margin-top:14px;justify-content:center}
+.sbacc b{display:block;font-weight:600;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sbacc small{display:block;color:var(--mut);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mod .stb{width:100%;text-align:left;background:none;font:inherit;color:var(--tx);padding-right:16px}
+.stv{color:var(--mut);font-size:13px;text-align:right;max-width:60%}
+.stb.brd .stl{color:var(--brand);font-weight:500}
+.sbin{padding:12px 16px;display:flex;flex-direction:column;gap:12px}
+.sbin p{margin:0;color:var(--mut);font-size:15px;line-height:1.35}
+.sbo p{margin:0 0 12px;line-height:1.4}
+.sbo .sbw{color:var(--warning);font-size:15px}
+.sbo .mb{flex-direction:column;align-items:stretch;gap:8px;margin-top:6px}
+.sbo .mb button{min-height:44px;justify-content:center;font-size:15px}
+html:root .mod .btn.dg{background:var(--danger)!important;background-image:none!important;color:var(--on-danger)!important;box-shadow:none!important}
+html:root .mod .btn.fl{background:var(--fill)!important;background-image:none!important;color:var(--ink)!important;box-shadow:none!important;border:1px solid var(--separator)!important}
 </style><script>(function(){var r=document.documentElement,g=function(k){try{return localStorage.getItem(k)}catch(e){return null}};var t=g('studio-theme')||g('ynab-theme')||'auto';if(!/^(auto|light|dark)$/.test(t))t='auto';var l=g('studio-lang')||g('ynab-lang')||'de';if(t==='light'||t==='dark')r.setAttribute('data-theme',t);var dk=t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);r.classList.add(dk?'dk':'lt');r.lang=l==='en'?'en':'de';if(t!=='auto'){var c=dk?'#141012':'#FAF7F2';document.querySelectorAll('meta[name=theme-color]').forEach(function(m){m.content=c})}})()</script></head><body>
 <div id="app"></div><div id="pad"></div><input type="file" id="impplan" accept=".json" hidden>
 <script>
@@ -741,13 +764,14 @@ function modalHTML(){const M=UI.modal;if(!M)return'';let b='';
  else if(M.t==='act')b=actHTML();
  else if(M.t==='disp')b=dispHTML();else if(M.t==='xfer')b=xferHTML();else if(M.t==='split')b=splitHTML();else if(M.t==='move')b=moveHTML();else if(M.t==='moves')b=movesHTML();else if(M.t==='rec')b=recHTML();else if(M.t==='check')b=checkHTML();else if(M.t==='pins')b=pinsHTML();else if(M.t==='goal')b=goalHTML();else if(M.t==='bulkcat')b=`<h4>${gT('Kategorie zuweisen','Assign category')}</h4><select id="bk-c"><option value="">—</option>${catOpts('')}</select><div class="mb"><span class="sp"></span><button class="lk" data-a="mx">${gT('Abbrechen','Cancel')}</button><button class="btn" data-a="bulkok">${gT('Zuweisen','Apply')}</button></div>`;
  else if(M.t==='login')b=loginHTML();
+ else if(M.t==='sbout')b=sboutHTML();
  else if(M.t==='paste')b=pasteHTML();
  else if(M.t==='tpl')b=tplHTML();
  else if(M.t==='fresh')b=freshHTML();
  else if(M.t==='accedit'){const ac=S.accounts.find(x=>x.id===M.id)||{name:''},n=S.tx.filter(t=>t.acc===M.id).length,bal=accBal(M.id);
   b=`<h4>${gT('Konto bearbeiten','Edit account')}</h4><label class="sl">${gT('Name','Name')}</label><input id="mi" value="${esc(M.nm!==undefined?M.nm:ac.name)}"><label class="sl">${gT('Aktueller Kontostand','Current balance')}</label><input id="mbal" inputmode="decimal" value="${esc(M.bl!==undefined?M.bl:bal.toFixed(2).replace('.',','))}"><p class="sl">${gT('Wenn du den Kontostand änderst, legt B.A.S.E eine Korrekturbuchung über die Differenz an. ','If you change the balance, the difference is booked as a reconciliation transaction. ')}${n} ${gT('Buchungen in diesem Konto.','transactions in this account.')}</p><div class="mb"><button class="del" data-a="accdelask">${gT('Konto löschen','Delete account')}</button><span class="sp"></span><button class="lk" data-a="mx">${gT('Abbrechen','Cancel')}</button><button class="btn" data-a="accsave">${gT('Speichern','Save')}</button></div>`}
  else if(M.t==='accdel'){const ac=S.accounts.find(x=>x.id===M.id)||{name:''},n=S.tx.filter(t=>t.acc===M.id).length,x=S.tx.filter(t=>t.acc===M.id&&t.xf).length;
-  b=`<h4>${gT('Konto löschen?','Delete account?')}</h4><p>${gT('„'+esc(ac.name)+'“ und alle '+n+' Buchungen darin werden endgültig gelöscht.','“'+esc(ac.name)+'” and all '+n+' transactions in it will be permanently deleted.')}${x?' '+gT('Die Gegenbuchungen von '+x+' Überweisungen bleiben in den anderen Konten als normale Buchungen ohne Kategorie bestehen.',x+' transfer counterparts stay in the other accounts as normal uncategorized transactions.'):''}</p><div class="mb"><span class="sp"></span><button class="lk" data-a="mx">${gT('Abbrechen','Cancel')}</button><button class="btn" style="background:var(--r)" data-a="accdelok">${gT('Endgültig löschen','Delete permanently')}</button></div>`}
+  b=`<h4>${gT('Konto löschen?','Delete account?')}</h4><p>${gT('„'+esc(ac.name)+'“ und alle '+n+' Buchungen darin werden endgültig gelöscht.','“'+esc(ac.name)+'” and all '+n+' transactions in it will be permanently deleted.')}${x?' '+gT('Die Gegenbuchungen von '+x+' Überweisungen bleiben in den anderen Konten als normale Buchungen ohne Kategorie bestehen.',x+' transfer counterparts stay in the other accounts as normal uncategorized transactions.'):''}</p><div class="mb"><span class="sp"></span><button class="lk" data-a="mx">${gT('Abbrechen','Cancel')}</button><button class="btn dg" data-a="accdelok">${gT('Endgültig löschen','Delete permanently')}</button></div>`}
  else if(M.t==='bk')b=bkHTML();
  else if(M.t==='info')b=`<h4>${esc(M.h)}</h4><p>${esc(M.p)}</p><div class="mb"><span class="sp"></span><button class="btn" data-a="mx">${gT('Schließen','Close')}</button></div>`;
  const st=M.t==='disp';return`<div class="mask${UI.sheet||UI.pk||UI.rv?' top':''}${st?' setm':''}" data-a="mask"><div class="mod${M.t==='paste'?' wide':''}${st?' set" role="dialog" aria-modal="true" aria-labelledby="sth':''}">${b}</div></div>`}
@@ -944,9 +968,9 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');cons
  if(a==='sb'){if(sbUser){if(sbSt!=='sync')sbSync();return}
   if(!sbC&&sbSt==='unavail'){sbInit();return}UI.modal={t:'login'};return render()}
  if(a==='sbskip'){lsSet('sb-skip','1');UI.modal=null;return render()}
- if(a==='sbin')return sbAuth('in');
- if(a==='sbup')return sbAuth('up');
- if(a==='sbout'){(async()=>{try{await sbC.auth.signOut()}catch(e){}if(sbCh){try{sbC.removeChannel(sbCh)}catch(e){}sbCh=null}sbUser=null;lsDel('sb-snap');lsDel('sb-ts');sbBaseS=null;lsSet('sb-skip','1');sbStatus('off');render()})();return}
+ if(a==='sbg')return sbGoogle();
+ if(a==='sbout'){if(!sbUser)return;UI.modal={t:'sbout'};render();sbFocus('sbo-x');if(sbDirty()&&navigator.onLine!==false)sbSync().then(()=>{if(UI.modal&&UI.modal.t==='sbout')render()});return}
+ if(a==='sbo1'||a==='sbo0')return sbSignOut(a==='sbo1');
  if(a==='lang'){LANG=LANG==='de'?'en':'de';try{localStorage.setItem('studio-lang',LANG)}catch(e){}MN=LANG==='de'?MND:MNE;migrate();return render()}
  if(a==='undo'){UI.toast=null;return undo()}if(a==='redo')return redoF();
  if(a==='recent'){UI.modal={t:'moves'};return render()}
@@ -1013,8 +1037,8 @@ const SBT=['accounts','category_groups','categories','transactions','assignments
 let sbSt='off',sbLast='',sbErr='',sbC=null,sbUser=null,sbBusy=false,sbTm=null,sbCh=null,sbRtT=null,sbBaseS=null,sbDefer=false;
 const sbTime=()=>new Date().toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
 function sbLabel(){return'☁ '+({off:gT('Anmelden zum Synchronisieren','Sign in to sync'),sync:gT('Synchronisiere…','Syncing…'),ok:gT('Synchronisiert ','Synced ')+sbLast,err:gT('Sync-Fehler','Sync error')+(sbErr?' ('+sbErr+')':'')+gT(' – tippen',' – tap'),unavail:gT('Cloud nicht erreichbar – tippen','Cloud unreachable – tap')}[sbSt])}
-function sbStatus(k){sbSt=k;const b=document.getElementById('sbb');if(b)b.textContent=sbLabel();const l=document.getElementById('sbl');if(l)l.textContent=gSyncTxt()}
-const sbBusyUI=()=>UI.adding||UI.txedit||UI.edit||(UI.modal&&UI.modal.t!=='login')||/INPUT|SELECT|TEXTAREA/.test((document.activeElement||{}).tagName||'');
+function sbStatus(k){sbSt=k;const b=document.getElementById('sbb');if(b)b.textContent=sbLabel();const l=document.getElementById('sbl');if(l)l.textContent=gSyncTxt();const g=document.getElementById('sbset');if(g)g.innerHTML=sbSetHTML()}
+const sbBusyUI=()=>UI.adding||UI.txedit||UI.edit||(UI.modal&&UI.modal.t!=='login'&&UI.modal.t!=='disp')||/INPUT|SELECT|TEXTAREA/.test((document.activeElement||{}).tagName||'');
 // --- Zeilenmodell: S <-> Tabellen ---
 function sbRows(s){const R={};SBT.forEach(t=>R[t]=[]);const nz=o=>Object.keys(o).length?o:null,N=v=>v===undefined?null:v;
  (s.accounts||[]).forEach((a,i)=>{const{id,name,...x}=a;R.accounts.push({id:String(id),name:name||'',pos:i,extra:nz(x)})});
@@ -1063,23 +1087,52 @@ async function sbSync(){if(sbBusy||!sbC||!sbUser)return;
  if(again)return sbSync()}
 function sbPush(){if(!sbUser)return;clearTimeout(sbTm);sbTm=setTimeout(sbSync,1500)}
 function sbRT(){try{if(sbCh)sbC.removeChannel(sbCh);sbCh=sbC.channel('base-'+sbUser.id).on('postgres_changes',{event:'*',schema:'public',table:'base_settings',filter:'user_id=eq.'+sbUser.id},()=>{clearTimeout(sbRtT);sbRtT=setTimeout(sbSync,400)}).subscribe()}catch(e){}}
+// --- Anmeldung mit Google (Supabase Auth, PKCE, Weiterleitung – auch in der installierten App) ---
+const sbRedirect=()=>location.origin+location.pathname.replace(/[^/]*$/,'');
+const sbName=u=>{const m=(u&&u.user_metadata)||{};return m.full_name||m.name||''};
+const sbDirty=()=>!!sbUser&&((+S.mod||0)>(+(sbBaseS||{}).mod||0)||sbSt==='err');
+function sbFocus(id){setTimeout(()=>{const b=document.getElementById(id);if(b)b.focus({preventScroll:true})},0)}
+function sbErrTxt(x){const m=String((x&&(x.message||x.error_description||x.msg))||x||'').trim();
+ if(navigator.onLine===false||/failed to fetch|networkerror|load failed|network/i.test(m))return gT('Keine Verbindung. Zum Anmelden brauchst du einmal Internet.','No connection. You need internet once to sign in.');
+ if(/code.?verifier|flow.?state|auth code/i.test(m))return gT('Die Anmeldung ist abgelaufen oder wurde in einem anderen Browser gestartet. Tippe hier noch einmal auf „Mit Google anmelden“.','The sign-in expired or was started in another browser. Tap “Sign in with Google” here once more.');
+ if(/provider is not enabled|unsupported provider/i.test(m))return gT('Die Anmeldung mit Google ist für B.A.S.E noch nicht eingeschaltet.','Sign-in with Google is not switched on for B.A.S.E yet.');
+ return gT('Anmelden hat nicht geklappt'+(m?' ('+m.slice(0,80)+')':'')+'. Versuch es noch einmal.','Sign-in didn’t work'+(m?' ('+m.slice(0,80)+')':'')+'. Please try again.')}
+// Rückkehr von Google: ?code=… (Erfolg) oder ?error=… bzw. #error=… (Fehler/Abbruch)
+function sbUrlRet(){let q,h;try{q=new URLSearchParams(location.search);h=new URLSearchParams(location.hash.replace(/^#/,''))}catch(e){return null}
+ const g=k=>q.get(k)||h.get(k),code=q.get('code'),err=g('error');if(!code&&!err)return null;return{code,err,desc:g('error_description')||'',ec:g('error_code')||''}}
+function sbCleanUrl(){try{const u=new URL(location.href);['code','error','error_code','error_description','state'].forEach(k=>u.searchParams.delete(k));if(/(^|[#&])(error|access_token|code)=/.test(u.hash))u.hash='';history.replaceState(history.state,'',u.pathname+u.search+u.hash)}catch(e){}}
+const sbCancel=r=>r.err==='access_denied'||/cancel|denied/i.test(r.ec+' '+r.desc);
+function sbIn(u,fresh){sbUser=u;lsDel('sb-skip');if(fresh||(UI.modal&&UI.modal.t==='login'))UI.modal=fresh?{t:'disp'}:null;render();sbRT();sbSync()}
+async function sbGoogle(){const set=m=>{UI.modal={t:'login',err:m};render()};
+ if(navigator.onLine===false)return set(sbErrTxt('network'));
+ if(!sbC){sbInit();return set(gT('Cloud nicht erreichbar – bitte gleich noch einmal versuchen.','Cloud unreachable – please try again in a moment.'))}
+ if(UI.modal&&UI.modal.t==='login'){UI.modal={t:'login',busy:true};render()}else if(UI.modal&&UI.modal.t==='disp'){UI.sbBusy=true;sbStatus(sbSt)}
+ try{lsSet('sb-oauth',String(Date.now()));
+  const{error}=await sbC.auth.signInWithOAuth({provider:'google',options:{redirectTo:sbRedirect(),queryParams:{prompt:'select_account'}}});
+  if(error)throw error}
+ catch(x){lsDel('sb-oauth');UI.sbBusy=false;set(sbErrTxt(x))}}
+async function sbSignOut(wipe){if(UI.modal)UI.modal.busy=true;render();clearTimeout(sbTm);
+ try{await sbC.auth.signOut({scope:'local'})}catch(e){}
+ if(sbCh){try{sbC.removeChannel(sbCh)}catch(e){}sbCh=null}
+ sbUser=null;lsDel('sb-snap');lsDel('sb-ts');sbBaseS=null;lsSet('sb-skip','1');
+ if(wipe){// Studio-Regel: lokale Finanzdaten nach Rückfrage löschen (Einstellungen wie Thema/Sprache bleiben)
+  [K,'base-name','ynab-lastacc','bk-day'].forEach(lsDel);hist=[];redo=[];
+  await new Promise(ok=>{try{const r=indexedDB.deleteDatabase('base-backup');r.onsuccess=r.onerror=r.onblocked=()=>ok()}catch(e){ok()}setTimeout(ok,1500)});
+  window.__sbWiped=true;return location.reload()}
+ UI.modal=null;sbStatus('off');render()}
 function sbInit(){sbBaseS=null;try{sbBaseS=JSON.parse(lsGet('sb-snap')||'null')}catch(e){}
- const go=async()=>{try{sbC=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
+ const go=async()=>{try{sbC=window.supabase.createClient(SB_URL,SB_KEY,{auth:{flowType:'pkce',persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
    sbC.auth.onAuthStateChange((ev)=>{if(ev==='SIGNED_OUT'&&sbUser){sbUser=null;sbStatus('off')}});
+   const ret=sbUrlRet();if(ret){sbCleanUrl();lsDel('sb-oauth')}
+   if(ret&&ret.code){sbStatus('sync');let r;try{r=await sbC.auth.exchangeCodeForSession(ret.code)}catch(x){r={error:x}}
+    if(r&&!r.error&&r.data&&r.data.session)return sbIn(r.data.session.user,true);
+    sbStatus('off');UI.modal={t:'login',err:sbErrTxt(r&&r.error)};return render()}
+   if(ret&&ret.err){sbStatus('off');UI.modal=sbCancel(ret)?{t:'login'}:{t:'login',err:sbErrTxt(ret.desc||ret.err)};return render()}
    const{data}=await sbC.auth.getSession();
-   if(data&&data.session){sbUser=data.session.user;sbRT();sbSync()}
+   if(data&&data.session)sbIn(data.session.user,false);
    else{sbStatus('off');if(!lsGet('sb-skip')){UI.modal={t:'login'};render()}}}catch(e){sbErr=String(e&&e.message||e).slice(0,60);sbStatus('unavail')}};
  if(window.supabase)return go();
  const sc=document.createElement('script');sc.src=SB_SDK;sc.integrity=SB_SRI;sc.crossOrigin='anonymous';sc.async=true;sc.onload=()=>window.supabase?go():sbStatus('unavail');sc.onerror=()=>sbStatus('unavail');document.head.appendChild(sc)}
-async function sbAuth(kind){const e=val('sb-e').trim(),p=(document.getElementById('sb-p')||{}).value||'';
- const set=m=>{UI.modal={t:'login',em:e,err:m};render()};
- if(!sbC)return set(gT('Cloud nicht erreichbar – bitte später nochmal versuchen.','Cloud unreachable – please try again later.'));
- if(!e||!p)return set(gT('Bitte E-Mail und Passwort eingeben.','Please enter email and password.'));
- if(kind==='up'&&p.length<6)return set(gT('Das Passwort braucht mindestens 6 Zeichen.','Password needs at least 6 characters.'));
- try{const r=kind==='up'?await sbC.auth.signUp({email:e,password:p}):await sbC.auth.signInWithPassword({email:e,password:p});
-  if(r.error)return set(r.error.message);
-  if(!r.data.session)return set(gT('Fast geschafft: Bestätigungs-Mail gesendet. Link öffnen, danach hier anmelden.','Almost there: confirmation email sent. Open the link, then sign in here.'));
-  sbUser=r.data.session.user;lsDel('sb-skip');UI.modal=null;render();sbRT();sbSync()}catch(x){set(String(x&&x.message||x))}}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&sbUser)sbSync()});
 setInterval(()=>{if(sbUser&&!document.hidden)sbSync()},60000);
 let LAY=lsGet('ynab-lay')||'auto',PAD=null;UI.sbHide=!!lsGet('ynab-sb');
@@ -1148,7 +1201,7 @@ UI.hide=!!lsGet('ynab-hide');UI.dense=!!lsGet('ynab-dense');applyTheme();
 function gSyncTxt(){const t=+lsGet('sb-ts');if(!sbUser||!t)return gT('Nicht angemeldet','Not signed in');const d=new Date(t),z=n=>String(n).padStart(2,'0');return gT('Letzter Sync: ','Last sync: ')+z(d.getDate())+'.'+z(d.getMonth()+1)+'.'+d.getFullYear()+' '+z(d.getHours())+':'+z(d.getMinutes())}
 function menuHTML(){const it=(ic,l,a)=>`<button class="mi" data-a="${a}"><span>${ic}</span>${l}</button>`;
  const inst=!matchMedia('(display-mode: standalone)').matches&&!navigator.standalone;return`<div class="pmenu"><div class="ms">${gT('Aktueller Plan','Current plan')}</div>${it('📋',gT('Haushaltsvorlage anwenden','Apply budget template'),'tpl')}${it('🔁',gT('Wiederkehrende Buchungen','Recurring transactions'),'rec')}${it('✅',gT('Plan prüfen','Check plan'),'check')}${inst?it('📲',gT('Als App installieren','Install as app'),'inst'):''}${it('⬇',gT('Plan exportieren','Export plan'),'export')}${it('⬆',gT('Plan importieren','Import plan'),'importplan')}${it('🛟',gT('Sicherungen','Backups'),'bk')}${it('🌿',gT('Neu anfangen','Fresh start'),'fresh')}
- <div class="ms">${gT('Konto','Account')}</div><button class="mi" id="sbb" data-a="sb">${sbLabel()}</button>${sbUser?`<div class="sl" style="padding:2px 14px">${esc(sbUser.email||'')}</div>`+it('⊘',gT('Abmelden','Sign out'),'sbout'):''}</div>`}
+ <div class="ms">${gT('Konto','Account')}</div><button class="mi" id="sbb" data-a="sb">${sbLabel()}</button>${sbUser?`<div class="sl" style="padding:2px 14px">${esc(sbName(sbUser)?sbName(sbUser)+' · '+(sbUser.email||''):(sbUser.email||''))}</div>`+it('⊘',gT('Abmelden …','Sign out …'),'sbout'):''}</div>`}
 const GEAR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
 const gearB=()=>`<button class="gear" data-a="disp" aria-label="${gT('Einstellungen','Settings')}" title="${gT('Einstellungen','Settings')}">${GEAR}</button>`;
 function dispHTML(){const seg=(k,o,cur,lb)=>`<div class="seg" role="radiogroup" aria-label="${lb}">${o.map(([v,l])=>`<button id="opt-${k}-${v}" role="radio" aria-checked="${cur===v}" tabindex="${cur===v?0:-1}" class="${cur===v?'on':''}" data-a="opt" data-k="${k}" data-v="${v}">${l}</button>`).join('')}</div>`,
@@ -1157,6 +1210,7 @@ function dispHTML(){const seg=(k,o,cur,lb)=>`<div class="seg" role="radiogroup" 
  <div class="ss">${gT('Darstellung','Appearance')}</div><div class="stg">${seg('theme',[['auto',gT('Automatisch','Automatic')],['light',gT('Hell','Light')],['dark',gT('Dunkel','Dark')]],thGet(),gT('Darstellung','Appearance'))}</div>
  <div class="ss">${gT('Sprache','Language')}</div><div class="stg">${seg('lang',[['de','Deutsch'],['en','English']],LANG,gT('Sprache','Language'))}</div>
  <div class="ss">B.A.S.E</div><div class="stg"><label class="str"><span class="stl">${gT('Dein Vorname','Your first name')}</span><input id="st-name" class="stin" value="${esc(lsGet('base-name')||'')}" placeholder="${gT('für die Begrüßung','for the greeting')}" autocomplete="given-name" maxlength="30"></label>${sw(gT('Kompakte Zeilen','Compact rows'),'dense',UI.dense)}${sw(gT('Beträge verbergen','Hide amounts'),'hide',UI.hide)}${sw(gT('Zielbalken','Target bars'),'pb',UI.pb)}${isPhone()?sw(gT('Mit neuer Buchung starten','Start with a new transaction'),'startq',lsGet('ynab-startq')!=='0'):''}</div>
+ <div class="ss">Cloud-Sync</div><div class="stg" id="sbset">${sbSetHTML()}</div>
  <div class="ss">${gT('Erweitert','Advanced')}</div><div class="stg"><div class="str stc"><span class="stl">${gT('Ansicht','Layout')}</span>${seg('lay',[['auto','Auto'],['desk','Desktop'],['tab','iPad/iPhone']],LAY,gT('Ansicht','Layout'))}</div></div>
  <div class="ss">${gT('Über','About')}</div><div class="stg sta"><img src="${LOGO}" alt=""><span><b>B.A.S.E</b><small>Budget Aufsetzen, Strategisch Einteilen</small><small>${gT('Version','Version')} ${BUILD} · <button class="stlk" data-a="upd">${gT('Aktualisieren','Update')}</button></small><small>${gT('Teil des Familien-App-Studios','Part of the Family App Studio')}</small></span></div>`}
 function freshHTML(){return`<h4>${gT('Neu anfangen','Fresh start')}</h4><p>${gT('Alle Zuweisungen und Buchungen werden gelöscht. Konten und Kategorien bleiben, die Kontostände werden als Anfangskontostand übernommen.','All assignments and transactions are removed. Accounts and categories stay; balances carry over as starting balances.')}</p><div class="mb"><span class="sp"></span><button class="lk" data-a="mx">${gT('Abbrechen','Cancel')}</button><button class="btn" data-a="dofresh">${gT('Neu anfangen','Fresh start')}</button></div>`}
@@ -1271,7 +1325,15 @@ document.addEventListener('focusin',e=>{if(e.target.id==='qp'||e.target.id==='qm
 document.addEventListener('focusout',e=>{if(e.target.id==='qp'||e.target.id==='qm'){document.body.classList.remove('kb');const ps=document.getElementById('qps');if(ps)ps.innerHTML=''}});
 document.addEventListener('mousedown',e=>{if(document.body.classList.contains('kb')&&e.target.closest('.quick button,.qsheet button'))e.preventDefault()},true);
 if(isTab()){UI.view='home';UI.tunc=true;if(isPhone())UI.sheet=lsGet('ynab-startq')!=='0'}
-function loginHTML(){const M=UI.modal;return`<h4>${gT('Anmelden – Cloud-Sync','Sign in – cloud sync')}</h4><p class="sl">${gT('Melde dich mit E-Mail und Passwort an, damit dein Plan auf allen Geräten gleich bleibt. Ohne Anmeldung arbeitet die App nur lokal auf diesem Gerät.','Sign in with email and password to keep your budget in sync on all devices. Without signing in, the app only works locally on this device.')}</p><input id="sb-e" type="email" autocomplete="username" placeholder="E-Mail" value="${esc(M.em||'')}"><input id="sb-p" type="password" autocomplete="current-password" placeholder="${gT('Passwort','Password')}" style="margin-top:6px">${M.err?`<p class="sl" style="color:var(--r)">${esc(M.err)}</p>`:''}<div class="mb"><button class="lk" data-a="sbskip">${gT('Ohne Sync weiter','Continue without sync')}</button><span class="sp"></span><button class="lk" data-a="sbup">${gT('Registrieren','Sign up')}</button><button class="btn" data-a="sbin">${gT('Anmelden','Sign in')}</button></div>`}
+const GLOGO='<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>';
+const gBtn=busy=>`<button class="gbtn" data-a="sbg"${busy?' disabled aria-busy="true"':''}>${GLOGO}<span>${busy?gT('Weiter zu Google …','Opening Google …'):gT('Mit Google anmelden','Sign in with Google')}</span></button>`;
+function loginHTML(){const M=UI.modal;return`<div class="lgin"><h4>${gT('Anmelden – Cloud-Sync','Sign in – cloud sync')}</h4><p>${gT('Melde dich mit deinem Google-Konto an, damit dein Plan auf allen Geräten gleich bleibt. Ohne Anmeldung arbeitet die App nur lokal auf diesem Gerät.','Sign in with your Google account to keep your budget in sync on all devices. Without signing in, the app only works locally on this device.')}</p>${gBtn(M.busy)}${M.err?`<p class="lgerr" role="alert">${esc(M.err)}</p>`:''}<div class="mb"><button class="lk" data-a="sbskip">${gT('Ohne Sync weiter','Continue without sync')}</button></div></div>`}
+function sbSetHTML(){if(sbUser){const n=sbName(sbUser),e=sbUser.email||'';
+  return`<div class="str sbacc"><span class="stl"><small>${gT('Angemeldet als','Signed in as')}</small><b>${esc(n||e)}</b>${n&&e?`<small>${esc(e)}</small>`:''}</span></div><button class="str stb" data-a="sb"><span class="stl">${gT('Synchronisieren','Sync')}</span><span class="stv" id="sbl">${esc(sbSt==='sync'?gT('Synchronisiere …','Syncing …'):sbSt==='err'?gT('Sync-Fehler – tippen','Sync error – tap'):gSyncTxt())}</span></button><button class="str stb brd" data-a="sbout"><span class="stl">${gT('Abmelden …','Sign out …')}</span></button>`}
+ if(sbSt==='unavail')return`<button class="str stb" data-a="sb"><span class="stl">${gT('Cloud nicht erreichbar','Cloud unreachable')}</span><span class="stv">${gT('Noch einmal versuchen','Try again')}</span></button>`;
+ return`<div class="sbin"><p>${gT('Melde dich mit Google an, damit dein Plan auf allen Geräten gleich bleibt. Ohne Anmeldung bleiben deine Daten nur auf diesem Gerät.','Sign in with Google to keep your budget the same on all devices. Without signing in, your data stays on this device only.')}</p>${gBtn(UI.sbBusy)}</div>`}
+function sboutHTML(){const M=UI.modal,b=M.busy?' disabled':'',dirty=sbDirty();
+ return`<div class="sbo"><h4>${gT('Abmelden?','Sign out?')}</h4><p>${gT('Sollen deine Finanzdaten (Konten, Buchungen und Plan) auch von diesem Gerät gelöscht werden? In deinem Konto bleiben sie erhalten.','Should your financial data (accounts, transactions and budget) also be removed from this device? It stays in your account.')}</p>${dirty?`<p class="sbw" role="alert">⚠ ${gT('Achtung: Einige Änderungen sind noch nicht übertragen. Wenn du die Daten vom Gerät löschst, gehen sie verloren. Warte am besten, bis „Synchronisiert“ angezeigt wird.','Careful: some changes haven’t synced yet. If you remove the data from this device, they will be lost. Best wait until “Synced” is shown.')}</p>`:''}<div class="mb"><button class="btn dg" data-a="sbo1"${b}>${gT('Abmelden und vom Gerät löschen','Sign out and remove from device')}</button><button class="btn fl" data-a="sbo0"${b}>${gT('Nur abmelden','Just sign out')}</button><button class="lk" id="sbo-x" data-a="mx"${b}>${gT('Abbrechen','Cancel')}</button></div></div>`}
 // ===== Neue Funktionen: Ueberweisung, Split, Wiederkehrend, Verschieben, Start, Check, Umsortieren =====
 const val=id=>(document.getElementById(id)||{}).value||'';
 const xAccN=id=>(S.accounts.find(a=>a.id===id)||{}).name||'';
@@ -1447,7 +1509,7 @@ function refPhoneHTML(){const dhead=t=>`<div class="dhead"><button class="dback"
  <div class="rc sm" data-a="rdet" data-k="aom"><h5><span>🕓 ${gT('Alter des Geldes','Age of Money')}</span><span class="chev">›</span></h5>${aomBox()}</div>${refCards()}</div></div>`}
 const PHV={home:homePhoneHTML,txl:txlHTML,accs:accsHTML,ref:refPhoneHTML};
 const dLong=d=>new Date(d+'T12:00:00').toLocaleDateString(LANG==='de'?'de-DE':'en-GB',{day:'numeric',month:'long',year:'numeric'});
-const BUILD='2026.10.31-1';
+const BUILD='2026.11.03-1';
 const LOGO='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiIHdpZHRoPSIxMDI0IiBoZWlnaHQ9IjEwMjQiPgogIDxkZWZzPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJiZy1iYXNlIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMTAyNCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4QzI1NDUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNUExMDI4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnb2xkLWJhc2UiIHgxPSIwIiB5MT0iMjEyIiB4Mj0iMCIgeTI9IjgxMiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNGMEQwOEEiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjQzg5NjNFIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAyNCIgaGVpZ2h0PSIxMDI0IiByeD0iMjMwIiByeT0iMjMwIiBmaWxsPSJ1cmwoI2JnLWJhc2UpIi8+CiAgPHBhdGggZD0iTTQyNCAzMDAgVjcyNCBNNDI0IDMwMCBINTQ0IEExMDAgMTAwIDAgMCAxIDU0NCA1MDAgSDQyNCBNNDI0IDUwMCBINTY0IEExMTIgMTEyIDAgMCAxIDU2NCA3MjQgSDQyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2dvbGQtYmFzZSkiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSI2NCIvPgogIDxsaW5lIHgxPSIzMDQiIHkxPSI0MzYiIHgyPSI0MjQiIHkyPSI0MzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNnb2xkLWJhc2UpIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iNjQiLz4KICA8bGluZSB4MT0iMzA0IiB5MT0iNTY0IiB4Mj0iNDI0IiB5Mj0iNTY0IiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjZ29sZC1iYXNlKSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjY0Ii8+Cgo8L3N2Zz4K';
 const needsCat=t=>!t.cat&&!t.xf&&t.out>0&&t.payee!=='Starting Balance';
 // ===== Kategorisieren per Wischkarten =====

@@ -5,7 +5,7 @@ Veröffentlicht über GitHub Pages; die Hauptdatei muss im Repo `ynab.html` hei�
 
 ## Dateien
 - `ynab.html` – die komplette App (HTML, CSS, JS inline, ca. 240 KB). Hier passiert fast alles.
-- `ynab-sw.js` – Service Worker (Cache `base-v4`, HTML immer netzfrisch, `*.supabase.co` wird nicht gecacht).
+- `ynab-sw.js` – Service Worker (Cache `base-v5`, HTML immer netzfrisch, `*.supabase.co` wird nicht gecacht).
 - `ynab-manifest.json` – PWA-Manifest (`id`/`start_url` `./`, `lang` de). Icons aus DasTeam `studio/brand/base*.svg`: `ynab-icon-180.png` (Apple), `ynab-icon-192/512.png`, `ynab-maskable-512.png`, `ynab-favicon-32.png`, `ynab-icon.svg`, `base-logo-512.png`. Icon-Adressen tragen `?v=2` (in `ynab.html` und Manifest); bei neuem Icon hochzählen, sonst behalten Browser und installierte App das alte.
 - `base-supabase-schema.sql` – Tabellen + Row Level Security für Supabase (einmal im SQL Editor ausführen).
 
@@ -26,7 +26,13 @@ Veröffentlicht über GitHub Pages; die Hauptdatei muss im Repo `ynab.html` hei�
 
 ## Supabase-Sync
 - URL `https://pcqabzbrorxwjaygmnks.supabase.co`, Publishable Key im Code (`SB_URL`, `SB_KEY`), SDK per jsDelivr geladen.
-- Login per E-Mail + Passwort (Supabase Auth). RLS: jeder sieht nur Zeilen mit `user_id = auth.uid()`.
+- Anmeldung nur noch **„Mit Google anmelden“** (Supabase Auth, `flowType: 'pkce'`, Weiterleitung im selben Fenster – auch in der installierten App). Kein E-Mail/Passwort mehr (Marco, 03.11.2026). „Ohne Sync weiter“ bleibt (rein lokal, merkt sich `sb-skip`).
+  - Funktionen: `sbGoogle` (startet `signInWithOAuth`, `redirectTo` = App-Ordner, z. B. `https://marcokland-web.github.io/umschlag/`, `prompt=select_account`), `sbInit` verarbeitet die Rückkehr (`sbUrlRet`: `?code=` → `exchangeCodeForSession`, `?error=`/`#error=`; `access_denied` = Abbruch, kein Fehler), `sbCleanUrl` säubert die Adresse, `sbIn` setzt den Nutzer und stößt Sync an, `sbErrTxt` übersetzt Fehler (DE/EN).
+  - `detectSessionInUrl:false` – die Rückkehr verarbeitet die App selbst.
+  - Kontostatus in den Einstellungen, Abschnitt „Cloud-Sync“ (`sbSetHTML`, wird über `sbStatus` aktualisiert) und im ⋯-Menü. „Abmelden …“ öffnet `sboutHTML`: „Abmelden und vom Gerät löschen“ (rot; löscht `ynab-nachbau-v1`, `sb-snap`, `sb-ts`, `base-name`, `ynab-lastacc`, `bk-day` und die IndexedDB `base-backup`, Thema/Sprache bleiben, danach Neuladen), „Nur abmelden“, „Abbrechen“ (Fokus). Warnung, wenn noch nicht alles übertragen ist (`sbDirty`). Abmelden nur auf diesem Gerät (`signOut({scope:'local'})`).
+  - Bestehende Konten: Supabase verknüpft die Google-Identität automatisch mit dem vorhandenen Nutzer gleicher bestätigter E-Mail, `user_id` bleibt gleich.
+  - **Einrichtung in Supabase (einmalig, vor der Auslieferung!)**: Authentication → Sign In / Providers → Google einschalten (Client-ID und -Secret aus der Google Cloud Console, dort als autorisierte Weiterleitungs-URI `https://pcqabzbrorxwjaygmnks.supabase.co/auth/v1/callback`). Authentication → URL Configuration → Redirect URLs: `https://marcokland-web.github.io/umschlag/` eintragen (für lokale Tests zusätzlich z. B. `http://localhost:8765/`). Ohne eingeschalteten Anbieter zeigt Supabase beim Tippen auf den Knopf eine Fehlerseite.
+- RLS: jeder sieht nur Zeilen mit `user_id = auth.uid()`.
 - Tabellen: `base_settings`, `accounts`, `category_groups`, `categories`, `transactions`, `assignments`, `recurring`.
 - Sync-Logik: Funktionen `sbSync`, `sbRows`, `sbBuild`, `sbDiff`, `sbWrite`. Zeilenweiser Diff gegen den zuletzt synchronisierten Stand
   (localStorage `sb-snap`), Konflikte werden zeilenweise zusammengeführt, `rev`/`S.mod` ist der Zeitstempel. Realtime auf `base_settings`.
@@ -47,5 +53,7 @@ Veröffentlicht über GitHub Pages; die Hauptdatei muss im Repo `ynab.html` hei�
 
 ## Testen
 - Syntaxcheck: Skript aus `<script>` extrahieren und mit `new Function(code)` in Node laden.
-- Browser-Tests mit Playwright (Chromium, headless) gegen `file:///.../ynab.html`; Testdaten über `S` setzen und `save()` aufrufen.
-  Für Touch: Viewport 820x1180 bzw. 390x844 mit `has_touch=True, is_mobile=True`. Supabase im Test durch ein Fake-`window.supabase` ersetzen.
+- Browser-Tests mit Playwright (Chromium, headless); Testdaten über `S` setzen und `save()` aufrufen.
+  Für Touch: Viewport 820x1180 bzw. 390x844 mit `has_touch=True, is_mobile=True`.
+- Google-Anmeldung: `NODE_PATH=~/Apps/DasTeam/tools/node_modules node tests/google-anmeldung.test.js` (mit `SHOTS=1` Bildschirmfotos in `tests/shots/`).
+  Echtes Supabase-SDK, alle Anfragen an `*.supabase.co` werden im Test beantwortet (Host gesperrt), Google wird nie aufgerufen; CSP der App bleibt aktiv (deshalb kein `waitForFunction`, sondern `until()`).
