@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de" translate="no"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://pcqabzbrorxwjaygmnks.supabase.co wss://pcqabzbrorxwjaygmnks.supabase.co; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<html lang="de" translate="no"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://lh3.googleusercontent.com; connect-src 'self' https://pcqabzbrorxwjaygmnks.supabase.co wss://pcqabzbrorxwjaygmnks.supabase.co; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>B.A.S.E</title>
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="B.A.S.E"><meta name="theme-color" content="#FAF7F2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#141012" media="(prefers-color-scheme: dark)"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="manifest" href="ynab-manifest.json?v=2"><link rel="apple-touch-icon" href="ynab-icon-180.png?v=2"><link rel="icon" href="ynab-icon.svg?v=2" type="image/svg+xml"><link rel="icon" href="ynab-favicon-32.png?v=2" sizes="32x32" type="image/png">
@@ -622,19 +622,29 @@ html:root .sw:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 html:root .tab .rta:is(.n,.z) .ab{display:none}html:root .tab .rta .ab{display:inline-flex;align-items:center;flex:none;margin-left:12px;min-height:40px;padding:0 14px;border-radius:999px;font-size:15px;font-weight:600}
 
 /* ===== Anmeldung mit Google (Knopf nach Googles Vorgaben) und Konto-Bereich ===== */
-.gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:44px;padding:0 16px 0 12px;border-radius:999px;background:#FFFFFF;border:1px solid #747775;color:#1F1F1F;font-size:15px;font-weight:600;letter-spacing:.01em;box-shadow:none}
+:root{--gsi-bg:#FFFFFF;--gsi-edge:#747775;--gsi-ink:#1F1F1F}
+html.dk{--gsi-bg:#131314;--gsi-edge:#8E918F;--gsi-ink:#E3E3E3}
+.gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:44px;padding:0 16px 0 12px;border-radius:999px;background:var(--gsi-bg);border:1px solid var(--gsi-edge);color:var(--gsi-ink);font-size:15px;font-weight:500;letter-spacing:.01em;box-shadow:none}
 .gbtn svg{width:20px;height:20px;flex:none}
-html.dk .gbtn{background:#131314;border-color:#8E918F;color:#E3E3E3}
 .gbtn:disabled{opacity:.6;cursor:default}
 .gbtn:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .lgin p{margin:0 0 14px;color:var(--mut);font-size:15px;line-height:1.35}
 .lgin .lgerr{color:var(--danger);margin:12px 0 0;font-size:15px}
 .lgin .mb{margin-top:14px;justify-content:center}
+.lgin .mb .lk{min-height:44px;padding:0 12px}
+.lgfin{display:flex;align-items:center;gap:12px;min-height:44px;font-size:15px;color:var(--tx)}
+.spin{width:22px;height:22px;flex:none;border-radius:50%;border:2.5px solid var(--separator);border-top-color:var(--brand);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.spin{animation-duration:2.4s}}
+.sbacc{gap:12px}
+.sbav{width:40px;height:40px;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--brand-tint);color:var(--brand);font-weight:600;font-size:17px;object-fit:cover;overflow:hidden}
+.mhd{display:flex;align-items:flex-start;gap:8px}.mhd h4{flex:1}
+.mclose{width:44px;height:44px;margin:-12px -12px 0 0;border-radius:50%;font-size:22px;line-height:1;color:var(--mut);flex:none}
 .sbacc b{display:block;font-weight:600;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sbacc small{display:block;color:var(--mut);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mod .stb{width:100%;text-align:left;background:none;font:inherit;color:var(--tx);padding-right:16px}
 .stv{color:var(--mut);font-size:13px;text-align:right;max-width:60%}
-.stb.brd .stl{color:var(--brand);font-weight:500}
+.stb.dgt .stl{color:var(--danger);font-weight:500}
 .sbin{padding:12px 16px;display:flex;flex-direction:column;gap:12px}
 .sbin p{margin:0;color:var(--mut);font-size:15px;line-height:1.35}
 .sbo p{margin:0 0 12px;line-height:1.4}
@@ -765,6 +775,8 @@ function modalHTML(){const M=UI.modal;if(!M)return'';let b='';
  else if(M.t==='disp')b=dispHTML();else if(M.t==='xfer')b=xferHTML();else if(M.t==='split')b=splitHTML();else if(M.t==='move')b=moveHTML();else if(M.t==='moves')b=movesHTML();else if(M.t==='rec')b=recHTML();else if(M.t==='check')b=checkHTML();else if(M.t==='pins')b=pinsHTML();else if(M.t==='goal')b=goalHTML();else if(M.t==='bulkcat')b=`<h4>${gT('Kategorie zuweisen','Assign category')}</h4><select id="bk-c"><option value="">—</option>${catOpts('')}</select><div class="mb"><span class="sp"></span><button class="lk" data-a="mx">${gT('Abbrechen','Cancel')}</button><button class="btn" data-a="bulkok">${gT('Zuweisen','Apply')}</button></div>`;
  else if(M.t==='login')b=loginHTML();
  else if(M.t==='sbout')b=sboutHTML();
+ else if(M.t==='sbswap')b=sbswapHTML();
+ else if(M.t==='sbswap2')b=sbswap2HTML();
  else if(M.t==='paste')b=pasteHTML();
  else if(M.t==='tpl')b=tplHTML();
  else if(M.t==='fresh')b=freshHTML();
@@ -774,7 +786,8 @@ function modalHTML(){const M=UI.modal;if(!M)return'';let b='';
   b=`<h4>${gT('Konto löschen?','Delete account?')}</h4><p>${gT('„'+esc(ac.name)+'“ und alle '+n+' Buchungen darin werden endgültig gelöscht.','“'+esc(ac.name)+'” and all '+n+' transactions in it will be permanently deleted.')}${x?' '+gT('Die Gegenbuchungen von '+x+' Überweisungen bleiben in den anderen Konten als normale Buchungen ohne Kategorie bestehen.',x+' transfer counterparts stay in the other accounts as normal uncategorized transactions.'):''}</p><div class="mb"><span class="sp"></span><button class="lk" data-a="mx">${gT('Abbrechen','Cancel')}</button><button class="btn dg" data-a="accdelok">${gT('Endgültig löschen','Delete permanently')}</button></div>`}
  else if(M.t==='bk')b=bkHTML();
  else if(M.t==='info')b=`<h4>${esc(M.h)}</h4><p>${esc(M.p)}</p><div class="mb"><span class="sp"></span><button class="btn" data-a="mx">${gT('Schließen','Close')}</button></div>`;
- const st=M.t==='disp';return`<div class="mask${UI.sheet||UI.pk||UI.rv?' top':''}${st?' setm':''}" data-a="mask"><div class="mod${M.t==='paste'?' wide':''}${st?' set" role="dialog" aria-modal="true" aria-labelledby="sth':''}">${b}</div></div>`}
+ const st=M.t==='disp',hx=/<h4[ >]/.test(b);if(!st&&hx)b=b.replace(/<h4([ >])/,'<h4 id="mod-h"$1');
+ return`<div class="mask${UI.sheet||UI.pk||UI.rv?' top':''}${st?' setm':''}" data-a="mask"><div class="mod${M.t==='paste'?' wide':''}${st?' set':''}" role="dialog" aria-modal="true" ${st?'aria-labelledby="sth"':hx?'aria-labelledby="mod-h"':'aria-label="'+gT('Dialog','Dialog')+'"'}>${b}</div></div>`}
 function sideHTML(){const tot=S.accounts.reduce((s,a)=>s+accBal(a.id),0),nv=(k,ic,l,x,on)=>`<button class="nav${on?' on':''}" data-a="nav" data-v="${k}" ${x} title="${l}"><span class="ic">${ic}</span><span class="lb">${l}</span></button>`;
  return`<aside class="${UI.side?'open ':''}${UI.cashc?'cashc':''}"><button class="plan" data-a="menu"><span class="ic lg"><img src="${LOGO}" alt=""></span><span class="pt"><b>B.A.S.E</b><small>Budget Aufsetzen, Strategisch Einteilen</small></span><i>▾</i></button>${UI.menu&&!isTab()?menuHTML():''}
  ${nv('home','🏠',gT('Start','Home'),'',UI.view==='home')}${nv('plan','🏛','Plan','',UI.view==='plan')}${nv('ref','📊','Reflect','',UI.view==='ref')}${(()=>{const n=S.tx.filter(needsCat).length;return`<button class="nav${UI.view==='inbox'?' on':''}" data-a="${isTab()?'review':'nav'}" data-v="inbox" title="${gT('Ohne Kategorie','Uncategorized')}"><span class="ic">📥</span><span class="lb">${gT('Ohne Kategorie','Uncategorized')}</span>${n?`<i class="nbd">${n}</i>`:''}</button>`})()}${nv('acc','🏦','All Accounts','data-i="all"',UI.view==='acc'&&UI.acc==='all')}
@@ -819,7 +832,7 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');cons
  if(UI.mp&&!e.target.closest('.mpop')&&!(el&&el.dataset.a==='mp')){UI.mp=false;render()}
  if(UI.pop&&!inPop&&!(el&&el.dataset.a==='pop')){UI.pop=false;render()}
  if(!el)return;const d=el.dataset,a=d.a;
- if(a==='mask'){if(e.target===el){UI.modal=null;render()}return}
+ if(a==='mask'){if(e.target===el){if(UI.modal&&/^sbswap/.test(UI.modal.t))return sbSwapCancel();UI.modal=null;render()}return}
  if(a==='chk')return;
  if(a==='auto')return applyAuto(d.k);
  if(a==='pop'){UI.pop=!UI.pop;return render()}
@@ -971,6 +984,12 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');cons
  if(a==='sbg')return sbGoogle();
  if(a==='sbout'){if(!sbUser)return;UI.modal={t:'sbout'};render();sbFocus('sbo-x');if(sbDirty()&&navigator.onLine!==false)sbSync().then(()=>{if(UI.modal&&UI.modal.t==='sbout')render()});return}
  if(a==='sbo1'||a==='sbo0')return sbSignOut(a==='sbo1');
+ if(a==='sbox'){UI.modal={t:'disp'};render();sbFocus('sbo-open');return}
+ if(a==='sbsw-take')return sbSwapTake();
+ if(a==='sbsw-del'){UI.modal={t:'sbswap2'};render();sbFocus('sbsw2-x');return}
+ if(a==='sbsw-back'){UI.modal={t:'sbswap'};render();sbFocus('sbsw-x');return}
+ if(a==='sbsw-delok')return sbSwapDiscard();
+ if(a==='sbsw-x')return sbSwapCancel();
  if(a==='lang'){LANG=LANG==='de'?'en':'de';try{localStorage.setItem('studio-lang',LANG)}catch(e){}MN=LANG==='de'?MND:MNE;migrate();return render()}
  if(a==='undo'){UI.toast=null;return undo()}if(a==='redo')return redoF();
  if(a==='recent'){UI.modal={t:'moves'};return render()}
@@ -998,7 +1017,7 @@ document.addEventListener('change',e=>{const el=e.target;if(el.id==='trep'){cons
 document.addEventListener('keydown',e=>{const el=e.target;
  if(el.id==='ai'&&(e.key==='Enter'||e.key==='Escape')){el.blur();return}
  if(el.id==='mi'&&e.key==='Enter'){document.querySelector('[data-a=mok]')?.click()}
- if(e.key==='Escape'&&UI.modal){UI.modal=null;render()}});
+ if(e.key==='Escape'&&UI.modal){const t=UI.modal.t;if(/^sbswap/.test(t)){if(t==='sbswap2'){UI.modal={t:'sbswap'};return render()}return sbSwapCancel()}if(t==='sbout'){UI.modal={t:'disp'};return render()}UI.modal=null;render()}});
 document.addEventListener('focusout',e=>{const el=e.target;if(el.id==='ai'&&UI.edit){const c=el.dataset.c,v=num(el.value);UI.edit=null;
  if(v!==asg(c,UI.month))commit(()=>{S.assigned[c+'|'+UI.month]=v});else render()}});
 const D={'Plan':'Plan','Reflect':'Analyse','All Accounts':'Alle Konten','CASH':'BARGELD','Add Account':'Konto hinzufügen','Bank Connections':'Bankverbindungen',"Marco's Plan":'Marcos Plan',
@@ -1030,7 +1049,7 @@ const MIG={'Bills':'Rechnungen','Rent/Mortgage':'Miete/Kredit','Phone & Internet
 function migrate(){document.documentElement.lang=LANG;if(!S.rec)S.rec=[];if(LANG==='de'&&!S.i18n){S.groups.forEach(g=>{g.name=MIG[g.name]||g.name;g.cats.forEach(c=>{c.name=MIG[c.name]||c.name})});S.i18n=1;try{localStorage.setItem(K,snap())}catch(e){}}}
 
 // ===== Supabase-Sync (Cloud-Sync) =====
-const SB_URL='https://pcqabzbrorxwjaygmnks.supabase.co',SB_KEY='sb_publishable_NqyrN9AsYDEDAt9UW_J4Qw_YNZPymoO',SB_SDK='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js',SB_SRI='sha384-0w2KAL2YHP6wKOkUDzkCDGgVvfmHnj02DHeQ6XcHOgTfFsGyonKOpShMH1x6nk9o';
+const SB_URL='https://pcqabzbrorxwjaygmnks.supabase.co',SB_KEY='sb_publishable_NqyrN9AsYDEDAt9UW_J4Qw_YNZPymoO',SB_SDK='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js',SB_SRI='sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK';
 const gT=(d,e)=>LANG==='de'?d:e;
 const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}},lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},lsDel=k=>{try{localStorage.removeItem(k)}catch(e){}};
 const SBT=['accounts','category_groups','categories','transactions','assignments','recurring'];
@@ -1092,17 +1111,36 @@ const sbRedirect=()=>location.origin+location.pathname.replace(/[^/]*$/,'');
 const sbName=u=>{const m=(u&&u.user_metadata)||{};return m.full_name||m.name||''};
 const sbDirty=()=>!!sbUser&&((+S.mod||0)>(+(sbBaseS||{}).mod||0)||sbSt==='err');
 function sbFocus(id){setTimeout(()=>{const b=document.getElementById(id);if(b)b.focus({preventScroll:true})},0)}
-function sbErrTxt(x){const m=String((x&&(x.message||x.error_description||x.msg))||x||'').trim();
+const sbNoAccTxt=()=>gT('Kein Zugang – bitte von der Familie freischalten lassen.','No access – ask your family to add you.');
+// Registrierung gesperrt (signup_disabled) oder vom Before-User-Created-Hook abgelehnt (403)
+const sbNoAcc=t=>/signup_disabled|signups? not allowed|hook|forbidden|\b403\b|not authori[sz]ed|no access/i.test(t||'');
+function sbErrTxt(x){const m=String((x&&(x.message||x.error_description||x.msg))||x||'').trim(),c=String((x&&(x.code||x.error_code))||'');
+ if(m||c)console.warn('Anmeldung:',c,m);
+ if(sbNoAcc(c+' '+m)||(x&&x.status===403))return sbNoAccTxt();
  if(navigator.onLine===false||/failed to fetch|networkerror|load failed|network/i.test(m))return gT('Keine Verbindung. Zum Anmelden brauchst du einmal Internet.','No connection. You need internet once to sign in.');
  if(/code.?verifier|flow.?state|auth code/i.test(m))return gT('Die Anmeldung ist abgelaufen oder wurde in einem anderen Browser gestartet. Tippe hier noch einmal auf „Mit Google anmelden“.','The sign-in expired or was started in another browser. Tap “Sign in with Google” here once more.');
  if(/provider is not enabled|unsupported provider/i.test(m))return gT('Die Anmeldung mit Google ist für B.A.S.E noch nicht eingeschaltet.','Sign-in with Google is not switched on for B.A.S.E yet.');
- return gT('Anmelden hat nicht geklappt'+(m?' ('+m.slice(0,80)+')':'')+'. Versuch es noch einmal.','Sign-in didn’t work'+(m?' ('+m.slice(0,80)+')':'')+'. Please try again.')}
+ return gT('Anmelden hat nicht geklappt. Versuch es noch einmal.','Sign-in didn\'t work. Please try again.')}
 // Rückkehr von Google: ?code=… (Erfolg) oder ?error=… bzw. #error=… (Fehler/Abbruch)
 function sbUrlRet(){let q,h;try{q=new URLSearchParams(location.search);h=new URLSearchParams(location.hash.replace(/^#/,''))}catch(e){return null}
  const g=k=>q.get(k)||h.get(k),code=q.get('code'),err=g('error');if(!code&&!err)return null;return{code,err,desc:g('error_description')||'',ec:g('error_code')||''}}
 function sbCleanUrl(){try{const u=new URL(location.href);['code','error','error_code','error_description','state'].forEach(k=>u.searchParams.delete(k));if(/(^|[#&])(error|access_token|code)=/.test(u.hash))u.hash='';history.replaceState(history.state,'',u.pathname+u.search+u.hash)}catch(e){}}
-const sbCancel=r=>r.err==='access_denied'||/cancel|denied/i.test(r.ec+' '+r.desc);
-function sbIn(u,fresh){sbUser=u;lsDel('sb-skip');if(fresh||(UI.modal&&UI.modal.t==='login'))UI.modal=fresh?{t:'disp'}:null;render();sbRT();sbSync()}
+const sbCancel=r=>!sbNoAcc(r.ec+' '+r.desc)&&(r.err==='access_denied'||/cancel|denied/i.test(r.ec+' '+r.desc));
+// Kontowechsel: Die Daten auf dem Gerät gehören zu dem Konto in sb-uid. Meldet sich ein anderes Konto an,
+// wird nichts zusammengeführt, sondern gefragt (Übernehmen / Verwerfen / Abbrechen = abmelden).
+let sbHold=null;
+function sbIn(u,fresh){const prev=lsGet('sb-uid');lsDel('sb-skip');
+ if(prev&&prev!==u.id){sbHold={u,fresh};sbUser=null;sbStatus('off');UI.modal={t:'sbswap'};render();sbFocus('sbsw-x');return}
+ lsSet('sb-uid',u.id);sbUser=u;if(fresh||(UI.modal&&/^(login|sbswap)/.test(UI.modal.t)))UI.modal=fresh?{t:'disp'}:null;render();sbRT();sbSync()}
+function sbSwapTake(){const h=sbHold;if(!h)return;sbHold=null;lsDel('sb-snap');lsDel('sb-ts');sbBaseS=null;lsSet('sb-uid',h.u.id);sbIn(h.u,true)}
+async function sbSwapCancel(){sbHold=null;try{const r=await sbC.auth.signOut({scope:'local'});if(r&&r.error)sbDropSession()}catch(e){sbDropSession()}
+ lsSet('sb-skip','1');UI.modal=null;sbStatus('off');render()}
+async function sbSwapDiscard(){const h=sbHold;if(!h)return;UI.modal.busy=true;render();await sbWipeLocal();lsSet('sb-uid',h.u.id);window.__sbWiped=true;location.reload()}
+const SB_REF=SB_URL.replace(/^https:\/\/([^.]+).*$/,'$1');
+function sbDropSession(){['-auth-token','-auth-token-code-verifier','-code-verifier','-auth-token-user'].forEach(x=>lsDel('sb-'+SB_REF+x))}
+async function sbWipeLocal(){// Studio-Regel: lokale Finanzdaten löschen (Thema/Sprache bleiben)
+ [K,'sb-snap','sb-ts','sb-uid','base-name','ynab-lastacc','bk-day'].forEach(lsDel);hist=[];redo=[];sbBaseS=null;
+ await new Promise(ok=>{try{const r=indexedDB.deleteDatabase('base-backup');r.onsuccess=r.onerror=r.onblocked=()=>ok()}catch(e){ok()}setTimeout(ok,1500)})}
 async function sbGoogle(){const set=m=>{UI.modal={t:'login',err:m};render()};
  if(navigator.onLine===false)return set(sbErrTxt('network'));
  if(!sbC){sbInit();return set(gT('Cloud nicht erreichbar – bitte gleich noch einmal versuchen.','Cloud unreachable – please try again in a moment.'))}
@@ -1112,22 +1150,23 @@ async function sbGoogle(){const set=m=>{UI.modal={t:'login',err:m};render()};
   if(error)throw error}
  catch(x){lsDel('sb-oauth');UI.sbBusy=false;set(sbErrTxt(x))}}
 async function sbSignOut(wipe){if(UI.modal)UI.modal.busy=true;render();clearTimeout(sbTm);
- try{await sbC.auth.signOut({scope:'local'})}catch(e){}
+ // Ohne Netz kann das Abmelden beim Server scheitern – die Sitzung auf dem Gerät wird trotzdem entfernt.
+ try{const r=await sbC.auth.signOut({scope:'local'});if(r&&r.error)sbDropSession()}catch(e){sbDropSession()}
  if(sbCh){try{sbC.removeChannel(sbCh)}catch(e){}sbCh=null}
  sbUser=null;lsDel('sb-snap');lsDel('sb-ts');sbBaseS=null;lsSet('sb-skip','1');
  if(wipe){// Studio-Regel: lokale Finanzdaten nach Rückfrage löschen (Einstellungen wie Thema/Sprache bleiben)
-  [K,'base-name','ynab-lastacc','bk-day'].forEach(lsDel);hist=[];redo=[];
-  await new Promise(ok=>{try{const r=indexedDB.deleteDatabase('base-backup');r.onsuccess=r.onerror=r.onblocked=()=>ok()}catch(e){ok()}setTimeout(ok,1500)});
-  window.__sbWiped=true;return location.reload()}
+  await sbWipeLocal();window.__sbWiped=true;return location.reload()}
  UI.modal=null;sbStatus('off');render()}
 function sbInit(){sbBaseS=null;try{sbBaseS=JSON.parse(lsGet('sb-snap')||'null')}catch(e){}
  const go=async()=>{try{sbC=window.supabase.createClient(SB_URL,SB_KEY,{auth:{flowType:'pkce',persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
    sbC.auth.onAuthStateChange((ev)=>{if(ev==='SIGNED_OUT'&&sbUser){sbUser=null;sbStatus('off')}});
    const ret=sbUrlRet();if(ret){sbCleanUrl();lsDel('sb-oauth')}
-   if(ret&&ret.code){sbStatus('sync');let r;try{r=await sbC.auth.exchangeCodeForSession(ret.code)}catch(x){r={error:x}}
+   if(ret&&ret.code){sbStatus('sync');UI.modal={t:'login',finishing:true};render();let r;try{r=await sbC.auth.exchangeCodeForSession(ret.code)}catch(x){r={error:x}}
     if(r&&!r.error&&r.data&&r.data.session)return sbIn(r.data.session.user,true);
+    // Code-Tausch gescheitert (z. B. alte Adresse mit ?code=), aber vielleicht besteht schon eine Sitzung
+    try{const{data:d0}=await sbC.auth.getSession();if(d0&&d0.session){if(UI.modal&&UI.modal.t==='login')UI.modal=null;return sbIn(d0.session.user,false)}}catch(e){}
     sbStatus('off');UI.modal={t:'login',err:sbErrTxt(r&&r.error)};return render()}
-   if(ret&&ret.err){sbStatus('off');UI.modal=sbCancel(ret)?{t:'login'}:{t:'login',err:sbErrTxt(ret.desc||ret.err)};return render()}
+   if(ret&&ret.err){sbStatus('off');UI.modal=sbCancel(ret)?{t:'login'}:{t:'login',err:sbNoAcc(ret.ec+' '+ret.desc)?sbNoAccTxt():sbErrTxt({message:ret.desc,code:ret.ec||ret.err})};return render()}
    const{data}=await sbC.auth.getSession();
    if(data&&data.session)sbIn(data.session.user,false);
    else{sbStatus('off');if(!lsGet('sb-skip')){UI.modal={t:'login'};render()}}}catch(e){sbErr=String(e&&e.message||e).slice(0,60);sbStatus('unavail')}};
@@ -1200,8 +1239,7 @@ try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ap
 UI.hide=!!lsGet('ynab-hide');UI.dense=!!lsGet('ynab-dense');applyTheme();
 function gSyncTxt(){const t=+lsGet('sb-ts');if(!sbUser||!t)return gT('Nicht angemeldet','Not signed in');const d=new Date(t),z=n=>String(n).padStart(2,'0');return gT('Letzter Sync: ','Last sync: ')+z(d.getDate())+'.'+z(d.getMonth()+1)+'.'+d.getFullYear()+' '+z(d.getHours())+':'+z(d.getMinutes())}
 function menuHTML(){const it=(ic,l,a)=>`<button class="mi" data-a="${a}"><span>${ic}</span>${l}</button>`;
- const inst=!matchMedia('(display-mode: standalone)').matches&&!navigator.standalone;return`<div class="pmenu"><div class="ms">${gT('Aktueller Plan','Current plan')}</div>${it('📋',gT('Haushaltsvorlage anwenden','Apply budget template'),'tpl')}${it('🔁',gT('Wiederkehrende Buchungen','Recurring transactions'),'rec')}${it('✅',gT('Plan prüfen','Check plan'),'check')}${inst?it('📲',gT('Als App installieren','Install as app'),'inst'):''}${it('⬇',gT('Plan exportieren','Export plan'),'export')}${it('⬆',gT('Plan importieren','Import plan'),'importplan')}${it('🛟',gT('Sicherungen','Backups'),'bk')}${it('🌿',gT('Neu anfangen','Fresh start'),'fresh')}
- <div class="ms">${gT('Konto','Account')}</div><button class="mi" id="sbb" data-a="sb">${sbLabel()}</button>${sbUser?`<div class="sl" style="padding:2px 14px">${esc(sbName(sbUser)?sbName(sbUser)+' · '+(sbUser.email||''):(sbUser.email||''))}</div>`+it('⊘',gT('Abmelden …','Sign out …'),'sbout'):''}</div>`}
+ const inst=!matchMedia('(display-mode: standalone)').matches&&!navigator.standalone;return`<div class="pmenu"><div class="ms">${gT('Aktueller Plan','Current plan')}</div>${it('📋',gT('Haushaltsvorlage anwenden','Apply budget template'),'tpl')}${it('🔁',gT('Wiederkehrende Buchungen','Recurring transactions'),'rec')}${it('✅',gT('Plan prüfen','Check plan'),'check')}${inst?it('📲',gT('Als App installieren','Install as app'),'inst'):''}${it('⬇',gT('Plan exportieren','Export plan'),'export')}${it('⬆',gT('Plan importieren','Import plan'),'importplan')}${it('🛟',gT('Sicherungen','Backups'),'bk')}${it('🌿',gT('Neu anfangen','Fresh start'),'fresh')}</div>`}
 const GEAR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
 const gearB=()=>`<button class="gear" data-a="disp" aria-label="${gT('Einstellungen','Settings')}" title="${gT('Einstellungen','Settings')}">${GEAR}</button>`;
 function dispHTML(){const seg=(k,o,cur,lb)=>`<div class="seg" role="radiogroup" aria-label="${lb}">${o.map(([v,l])=>`<button id="opt-${k}-${v}" role="radio" aria-checked="${cur===v}" tabindex="${cur===v?0:-1}" class="${cur===v?'on':''}" data-a="opt" data-k="${k}" data-v="${v}">${l}</button>`).join('')}</div>`,
@@ -1326,14 +1364,20 @@ document.addEventListener('focusout',e=>{if(e.target.id==='qp'||e.target.id==='q
 document.addEventListener('mousedown',e=>{if(document.body.classList.contains('kb')&&e.target.closest('.quick button,.qsheet button'))e.preventDefault()},true);
 if(isTab()){UI.view='home';UI.tunc=true;if(isPhone())UI.sheet=lsGet('ynab-startq')!=='0'}
 const GLOGO='<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>';
-const gBtn=busy=>`<button class="gbtn" data-a="sbg"${busy?' disabled aria-busy="true"':''}>${GLOGO}<span>${busy?gT('Weiter zu Google …','Opening Google …'):gT('Mit Google anmelden','Sign in with Google')}</span></button>`;
-function loginHTML(){const M=UI.modal;return`<div class="lgin"><h4>${gT('Anmelden – Cloud-Sync','Sign in – cloud sync')}</h4><p>${gT('Melde dich mit deinem Google-Konto an, damit dein Plan auf allen Geräten gleich bleibt. Ohne Anmeldung arbeitet die App nur lokal auf diesem Gerät.','Sign in with your Google account to keep your budget in sync on all devices. Without signing in, the app only works locally on this device.')}</p>${gBtn(M.busy)}${M.err?`<p class="lgerr" role="alert">${esc(M.err)}</p>`:''}<div class="mb"><button class="lk" data-a="sbskip">${gT('Ohne Sync weiter','Continue without sync')}</button></div></div>`}
+const gBtn=busy=>`<button class="gbtn" data-a="sbg"${busy?' disabled aria-busy="true"':''}>${GLOGO}<span>${busy?gT('Google wird geöffnet …','Opening Google …'):gT('Mit Google anmelden','Sign in with Google')}</span></button>`;
+function loginHTML(){const M=UI.modal;if(M.finishing)return`<div class="lgin"><h4>${gT('Anmelden – Cloud-Sync','Sign in – cloud sync')}</h4><div class="lgfin" role="status" aria-live="polite"><span class="spin" aria-hidden="true"></span>${gT('Anmeldung wird abgeschlossen …','Finishing sign-in …')}</div></div>`;return`<div class="lgin"><h4>${gT('Anmelden – Cloud-Sync','Sign in – cloud sync')}</h4><p>${gT('Melde dich mit deinem Google-Konto an, damit dein Plan auf allen Geräten gleich bleibt. Ohne Anmeldung arbeitet die App nur lokal auf diesem Gerät.','Sign in with your Google account to keep your budget in sync on all devices. Without signing in, the app only works locally on this device.')}</p>${gBtn(M.busy)}${M.err?`<p class="lgerr" role="alert">${esc(M.err)}</p>`:''}<div class="mb"><button class="lk" data-a="sbskip">${gT('Ohne Sync weiter','Continue without sync')}</button></div></div>`}
 function sbSetHTML(){if(sbUser){const n=sbName(sbUser),e=sbUser.email||'';
-  return`<div class="str sbacc"><span class="stl"><small>${gT('Angemeldet als','Signed in as')}</small><b>${esc(n||e)}</b>${n&&e?`<small>${esc(e)}</small>`:''}</span></div><button class="str stb" data-a="sb"><span class="stl">${gT('Synchronisieren','Sync')}</span><span class="stv" id="sbl">${esc(sbSt==='sync'?gT('Synchronisiere …','Syncing …'):sbSt==='err'?gT('Sync-Fehler – tippen','Sync error – tap'):gSyncTxt())}</span></button><button class="str stb brd" data-a="sbout"><span class="stl">${gT('Abmelden …','Sign out …')}</span></button>`}
+  const av=String((sbUser.user_metadata||{}).avatar_url||(sbUser.user_metadata||{}).picture||''),ini=esc(((n||e||'?').trim()[0]||'?').toUpperCase()),okAv=/^https:\/\/lh3\.googleusercontent\.com\//.test(av);
+  return`<div class="str sbacc">${okAv?`<img class="sbav" src="${esc(av)}" alt="" referrerpolicy="no-referrer" data-i="${ini}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'sbav',textContent:this.dataset.i}))">`:`<span class="sbav" aria-hidden="true">${ini}</span>`}<span class="stl"><b>${esc(n||e)}</b>${n&&e?`<small>${esc(e)}</small>`:''}<small>${gT('Angemeldet mit Google','Signed in with Google')}</small></span></div><button class="str stb" data-a="sb"><span class="stl">${gT('Synchronisieren','Sync')}</span><span class="stv" id="sbl">${esc(sbSt==='sync'?gT('Synchronisiere …','Syncing …'):sbSt==='err'?gT('Sync-Fehler – tippen','Sync error – tap'):gSyncTxt())}</span></button><button class="str stb dgt" id="sbo-open" data-a="sbout"><span class="stl">${gT('Abmelden …','Sign out …')}</span></button>`}
  if(sbSt==='unavail')return`<button class="str stb" data-a="sb"><span class="stl">${gT('Cloud nicht erreichbar','Cloud unreachable')}</span><span class="stv">${gT('Noch einmal versuchen','Try again')}</span></button>`;
  return`<div class="sbin"><p>${gT('Melde dich mit Google an, damit dein Plan auf allen Geräten gleich bleibt. Ohne Anmeldung bleiben deine Daten nur auf diesem Gerät.','Sign in with Google to keep your budget the same on all devices. Without signing in, your data stays on this device only.')}</p>${gBtn(UI.sbBusy)}</div>`}
+const mHead=(h,x)=>`<div class="mhd"><h4>${h}</h4><button class="mclose" data-a="${x}" aria-label="${gT('Schließen','Close')}">×</button></div>`;
+function sbswapHTML(){const M=UI.modal,b=M.busy?' disabled':'';
+ return`<div class="sbo">${mHead(gT('Daten eines anderen Kontos','Data from another account'),'sbsw-x')}<p>${gT('Auf diesem Gerät liegen Daten eines anderen Kontos. Übernehmen oder verwerfen?','This device holds data from another account. Take it over or discard it?')}</p><p class="sl">${gT('Übernehmen: Die Daten auf diesem Gerät kommen zusätzlich in dein Konto. Verwerfen: Sie werden von diesem Gerät gelöscht, danach werden die Daten deines Kontos geladen.','Take over: the data on this device is added to your account. Discard: it is removed from this device, then your account’s data is loaded.')}</p><div class="mb"><button class="btn fl" data-a="sbsw-take"${b}>${gT('Übernehmen','Take over')}</button><button class="btn dg" data-a="sbsw-del"${b}>${gT('Verwerfen …','Discard …')}</button><button class="lk" id="sbsw-x" data-a="sbsw-x"${b}>${gT('Abbrechen und abmelden','Cancel and sign out')}</button></div></div>`}
+function sbswap2HTML(){const M=UI.modal,b=M.busy?' disabled':'';
+ return`<div class="sbo">${mHead(gT('Daten verwerfen?','Discard data?'),'sbsw-back')}<p>${gT('Die Finanzdaten des anderen Kontos werden endgültig von diesem Gerät gelöscht. Was davon in der Cloud liegt, bleibt dort erhalten.','The other account’s financial data will be permanently removed from this device. Whatever is in the cloud stays there.')}</p><div class="mb"><button class="btn dg" data-a="sbsw-delok"${b}>${gT('Endgültig verwerfen','Discard permanently')}</button><button class="lk" id="sbsw2-x" data-a="sbsw-back"${b}>${gT('Abbrechen','Cancel')}</button></div></div>`}
 function sboutHTML(){const M=UI.modal,b=M.busy?' disabled':'',dirty=sbDirty();
- return`<div class="sbo"><h4>${gT('Abmelden?','Sign out?')}</h4><p>${gT('Sollen deine Finanzdaten (Konten, Buchungen und Plan) auch von diesem Gerät gelöscht werden? In deinem Konto bleiben sie erhalten.','Should your financial data (accounts, transactions and budget) also be removed from this device? It stays in your account.')}</p>${dirty?`<p class="sbw" role="alert">⚠ ${gT('Achtung: Einige Änderungen sind noch nicht übertragen. Wenn du die Daten vom Gerät löschst, gehen sie verloren. Warte am besten, bis „Synchronisiert“ angezeigt wird.','Careful: some changes haven’t synced yet. If you remove the data from this device, they will be lost. Best wait until “Synced” is shown.')}</p>`:''}<div class="mb"><button class="btn dg" data-a="sbo1"${b}>${gT('Abmelden und vom Gerät löschen','Sign out and remove from device')}</button><button class="btn fl" data-a="sbo0"${b}>${gT('Nur abmelden','Just sign out')}</button><button class="lk" id="sbo-x" data-a="mx"${b}>${gT('Abbrechen','Cancel')}</button></div></div>`}
+ return`<div class="sbo">${mHead(gT('Abmelden?','Sign out?'),'sbox')}<p>${gT('Sollen deine Finanzdaten (Konten, Buchungen und Plan) auch von diesem Gerät gelöscht werden? In der Cloud bleiben sie erhalten.','Should your financial data (accounts, transactions and budget) also be removed from this device? It stays in the cloud.')}</p>${dirty?`<p class="sbw" role="alert">⚠ ${gT('Achtung: Einige Änderungen sind noch nicht übertragen. Wenn du die Daten vom Gerät löschst, gehen sie verloren. Warte am besten, bis „Synchronisiert“ angezeigt wird.','Careful: some changes haven’t synced yet. If you remove the data from this device, they will be lost. Best wait until “Synced” is shown.')}</p>`:''}<div class="mb"><button class="btn dg" data-a="sbo1"${b}>${gT('Abmelden und vom Gerät löschen','Sign out and remove from device')}</button><button class="btn fl" data-a="sbo0"${b}>${gT('Nur abmelden','Just sign out')}</button><button class="lk" id="sbo-x" data-a="sbox"${b}>${gT('Abbrechen','Cancel')}</button></div></div>`}
 // ===== Neue Funktionen: Ueberweisung, Split, Wiederkehrend, Verschieben, Start, Check, Umsortieren =====
 const val=id=>(document.getElementById(id)||{}).value||'';
 const xAccN=id=>(S.accounts.find(a=>a.id===id)||{}).name||'';
@@ -1509,7 +1553,7 @@ function refPhoneHTML(){const dhead=t=>`<div class="dhead"><button class="dback"
  <div class="rc sm" data-a="rdet" data-k="aom"><h5><span>🕓 ${gT('Alter des Geldes','Age of Money')}</span><span class="chev">›</span></h5>${aomBox()}</div>${refCards()}</div></div>`}
 const PHV={home:homePhoneHTML,txl:txlHTML,accs:accsHTML,ref:refPhoneHTML};
 const dLong=d=>new Date(d+'T12:00:00').toLocaleDateString(LANG==='de'?'de-DE':'en-GB',{day:'numeric',month:'long',year:'numeric'});
-const BUILD='2026.11.03-1';
+const BUILD='2026.11.04-1';
 const LOGO='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiIHdpZHRoPSIxMDI0IiBoZWlnaHQ9IjEwMjQiPgogIDxkZWZzPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJiZy1iYXNlIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMTAyNCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4QzI1NDUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNUExMDI4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnb2xkLWJhc2UiIHgxPSIwIiB5MT0iMjEyIiB4Mj0iMCIgeTI9IjgxMiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNGMEQwOEEiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjQzg5NjNFIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAyNCIgaGVpZ2h0PSIxMDI0IiByeD0iMjMwIiByeT0iMjMwIiBmaWxsPSJ1cmwoI2JnLWJhc2UpIi8+CiAgPHBhdGggZD0iTTQyNCAzMDAgVjcyNCBNNDI0IDMwMCBINTQ0IEExMDAgMTAwIDAgMCAxIDU0NCA1MDAgSDQyNCBNNDI0IDUwMCBINTY0IEExMTIgMTEyIDAgMCAxIDU2NCA3MjQgSDQyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2dvbGQtYmFzZSkiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSI2NCIvPgogIDxsaW5lIHgxPSIzMDQiIHkxPSI0MzYiIHgyPSI0MjQiIHkyPSI0MzYiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNnb2xkLWJhc2UpIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iNjQiLz4KICA8bGluZSB4MT0iMzA0IiB5MT0iNTY0IiB4Mj0iNDI0IiB5Mj0iNTY0IiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjZ29sZC1iYXNlKSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjY0Ii8+Cgo8L3N2Zz4K';
 const needsCat=t=>!t.cat&&!t.xf&&t.out>0&&t.payee!=='Starting Balance';
 // ===== Kategorisieren per Wischkarten =====

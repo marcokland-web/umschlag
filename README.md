@@ -10,4 +10,7 @@ Einmalig in Supabase einrichten (Projekt `pcqabzbrorxwjaygmnks`):
 2. Authentication → URL Configuration → Redirect URLs: `https://marcokland-web.github.io/umschlag/` eintragen.
 
 ## Tests
-`NODE_PATH=~/Apps/DasTeam/tools/node_modules node tests/google-anmeldung.test.js`
+```
+NODE_PATH=~/Apps/DasTeam/tools/node_modules node tests/google-anmeldung.test.js
+NODE_PATH=~/Apps/DasTeam/tools/node_modules node tests/google-randfaelle.test.js
+```
