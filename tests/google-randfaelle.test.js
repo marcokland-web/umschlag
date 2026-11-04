@@ -145,6 +145,29 @@ const leaked = log => log.rest.filter(x => /^(POST|PATCH)/.test(x) && x.includes
     });
   }
 
+  // Echte Antwort des Before-User-Created-Hooks (gemessen 04.11.2026): 403, error_code "unknown", Meldung im Text
+  for (const mode of ['hookLiveQ', 'hookLiveH', 'hookLiveToken']) {
+    await t(`Kein Zugang, echte Hook-Antwort (${mode})`, async () => {
+      const { ctx, page } = await setup(browser, { mode });
+      await open(page); await loginModal(page).waitFor();
+      await page.locator('.lgin .gbtn').click();
+      await page.locator('.lgin [role=alert]').waitFor({ timeout: 10000 });
+      ok((await page.locator('.lgin [role=alert]').innerText()) === 'Kein Zugang – bitte von der Familie freischalten lassen.', await page.locator('.lgin [role=alert]').innerText());
+      ok(!/error|code=/.test(page.url()), 'URL nicht gesäubert');
+      await ctx.close();
+    });
+  }
+  for (const mode of ['expired403', 'badverifier403']) {
+    await t(`403 mit ${mode}: gilt weiter als „abgelaufen“, nicht als „Kein Zugang“`, async () => {
+      const { ctx, page } = await setup(browser, { mode });
+      await open(page); await loginModal(page).waitFor();
+      await page.locator('.lgin .gbtn').click();
+      await page.locator('.lgin [role=alert]').waitFor({ timeout: 10000 });
+      ok(/abgelaufen oder wurde in einem anderen Browser/.test(await page.locator('.lgin [role=alert]').innerText()));
+      await ctx.close();
+    });
+  }
+
   await t('Kein Zugang Englisch', async () => {
     const { ctx, page } = await setup(browser, { init: () => localStorage.setItem('studio-lang', 'en') });
     await page.goto('http://localhost:8799/?error=access_denied&error_code=signup_disabled&error_description=Signups+not+allowed');

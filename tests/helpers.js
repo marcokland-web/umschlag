@@ -54,6 +54,8 @@ async function setup(browser, opts = {}) {
       else if (log.mode === 'servererr') { back.searchParams.set('error', 'server_error'); back.searchParams.set('error_description', 'Unable to exchange external code'); }
       else if (log.mode === 'signupoff') { back.searchParams.set('error', 'access_denied'); back.searchParams.set('error_code', 'signup_disabled'); back.searchParams.set('error_description', 'Signups not allowed for this instance'); }
       else if (log.mode === 'hook403') { back.hash = 'error=access_denied&error_code=403&error_description=' + encodeURIComponent('Forbidden by before-user-created hook'); }
+      else if (log.mode === 'hookLiveQ') { back.searchParams.set('error', 'server_error'); back.searchParams.set('error_code', 'unknown'); back.searchParams.set('error_description', 'Kein Zugang – bitte von der Familie freischalten lassen.'); }
+      else if (log.mode === 'hookLiveH') { back.hash = 'error=server_error&error_code=unknown&error_description=' + encodeURIComponent('Kein Zugang – bitte von der Familie freischalten lassen.'); }
       else back.searchParams.set('code', 'TESTCODE-' + log.authorize.length);
       // (Ein echtes 302 würde Playwright nicht erneut abfangen; daher Weiterleitung per Seite.)
       return r.fulfill({ status: 200, headers: { 'content-type': 'text/html' }, body: `<script>location.replace(${JSON.stringify(back.toString())})</script>` });
@@ -61,6 +63,9 @@ async function setup(browser, opts = {}) {
     if (u.pathname === '/auth/v1/token') {
       const b = JSON.parse(req.postData() || '{}'); log.token.push({ grant: u.searchParams.get('grant_type'), ...b });
       if (log.tokenDelay) await new Promise(res => setTimeout(res, log.tokenDelay));
+      if (log.mode === 'hookLiveToken') return r.fulfill({ status: 403, headers: cors, body: JSON.stringify({ code: 403, error_code: 'unknown', msg: 'Kein Zugang – bitte von der Familie freischalten lassen.' }) });
+      if (log.mode === 'expired403') return r.fulfill({ status: 403, headers: cors, body: JSON.stringify({ code: 403, error_code: 'flow_state_expired', msg: 'Flow state has expired' }) });
+      if (log.mode === 'badverifier403') return r.fulfill({ status: 403, headers: cors, body: JSON.stringify({ code: 403, error_code: 'bad_code_verifier', msg: 'code challenge does not match previously saved code verifier' }) });
       if (log.mode === 'badgrant') return r.fulfill({ status: 400, headers: cors, body: JSON.stringify({ error: 'invalid_grant', error_description: 'invalid flow state, no valid flow state found', code: 'flow_state_not_found', msg: 'invalid flow state, no valid flow state found' }) });
       const now = Math.floor(Date.now() / 1000);
       return r.fulfill({ status: 200, headers: cors, body: JSON.stringify({ access_token: 'x.' + Buffer.from(JSON.stringify({ sub: (log.user || USER).id, exp: now + 3600 })).toString('base64url') + '.y', token_type: 'bearer', expires_in: 3600, expires_at: now + 3600, refresh_token: 'rt', user: log.user || USER }) });

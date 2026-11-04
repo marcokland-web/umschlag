@@ -1113,9 +1113,12 @@ const sbDirty=()=>!!sbUser&&((+S.mod||0)>(+(sbBaseS||{}).mod||0)||sbSt==='err');
 function sbFocus(id){setTimeout(()=>{const b=document.getElementById(id);if(b)b.focus({preventScroll:true})},0)}
 const sbNoAccTxt=()=>gT('Kein Zugang – bitte von der Familie freischalten lassen.','No access – ask your family to add you.');
 // Registrierung gesperrt (signup_disabled) oder vom Before-User-Created-Hook abgelehnt (403)
-const sbNoAcc=t=>/signup_disabled|signups? not allowed|hook|forbidden|\b403\b|not authori[sz]ed|no access/i.test(t||'');
+const sbNoAcc=t=>/kein zugang|freischalten|signup_disabled|signups? not allowed|hook|forbidden|\b403\b|not authori[sz]ed|no access/i.test(t||'');
+const sbExpired=t=>/code.?verifier|flow.?state|auth code/i.test(t||'');
 function sbErrTxt(x){const m=String((x&&(x.message||x.error_description||x.msg))||x||'').trim(),c=String((x&&(x.code||x.error_code))||'');
  if(m||c)console.warn('Anmeldung:',c,m);
+ // Abgelaufene Anmeldung (flow_state_expired, bad_code_verifier) kommt ebenfalls als 403 – zuerst prüfen
+ if(sbExpired(c+' '+m))return gT('Die Anmeldung ist abgelaufen oder wurde in einem anderen Browser gestartet. Tippe hier noch einmal auf „Mit Google anmelden“.','The sign-in expired or was started in another browser. Tap “Sign in with Google” here once more.');
  if(sbNoAcc(c+' '+m)||(x&&x.status===403))return sbNoAccTxt();
  if(navigator.onLine===false||/failed to fetch|networkerror|load failed|network/i.test(m))return gT('Keine Verbindung. Zum Anmelden brauchst du einmal Internet.','No connection. You need internet once to sign in.');
  if(/code.?verifier|flow.?state|auth code/i.test(m))return gT('Die Anmeldung ist abgelaufen oder wurde in einem anderen Browser gestartet. Tippe hier noch einmal auf „Mit Google anmelden“.','The sign-in expired or was started in another browser. Tap “Sign in with Google” here once more.');
@@ -1166,7 +1169,7 @@ function sbInit(){sbBaseS=null;try{sbBaseS=JSON.parse(lsGet('sb-snap')||'null')}
     // Code-Tausch gescheitert (z. B. alte Adresse mit ?code=), aber vielleicht besteht schon eine Sitzung
     try{const{data:d0}=await sbC.auth.getSession();if(d0&&d0.session){if(UI.modal&&UI.modal.t==='login')UI.modal=null;return sbIn(d0.session.user,false)}}catch(e){}
     sbStatus('off');UI.modal={t:'login',err:sbErrTxt(r&&r.error)};return render()}
-   if(ret&&ret.err){sbStatus('off');UI.modal=sbCancel(ret)?{t:'login'}:{t:'login',err:sbNoAcc(ret.ec+' '+ret.desc)?sbNoAccTxt():sbErrTxt({message:ret.desc,code:ret.ec||ret.err})};return render()}
+   if(ret&&ret.err){sbStatus('off');UI.modal=sbCancel(ret)?{t:'login'}:{t:'login',err:sbErrTxt({message:ret.desc,code:ret.ec||ret.err})};return render()}
    const{data}=await sbC.auth.getSession();
    if(data&&data.session)sbIn(data.session.user,false);
    else{sbStatus('off');if(!lsGet('sb-skip')){UI.modal={t:'login'};render()}}}catch(e){sbErr=String(e&&e.message||e).slice(0,60);sbStatus('unavail')}};
