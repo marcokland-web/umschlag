@@ -68,6 +68,24 @@ const { chromium, fs, path, ORIGIN, USER, K, t, ok, setup, until, open, loginMod
     await ctx.close();
   });
 
+  await t('Alte E-Mail-Sitzung: Einstellungen zeigen „Noch mit E-Mail angemeldet“ und den Google-Knopf', async () => {
+    const { ctx, page, log } = await setup(browser);
+    await open(page); await loginModal(page).waitFor();
+    await signIn(page);
+    await until(page, () => sbSt === 'ok', null, { timeout: 10000 });
+    await page.evaluate(() => { sbUser = Object.assign({}, sbUser, { app_metadata: { provider: 'email', providers: ['email'] }, identities: [] }); sbStatus(sbSt); });
+    const set = await page.locator('#sbset').innerText();
+    ok(/Noch mit E-Mail angemeldet/.test(set) && !/Angemeldet mit Google/.test(set), 'Falsche Anzeige: ' + set);
+    const btn = page.locator('#sbset [data-a=sbg]');
+    ok(await btn.count() === 1, 'Google-Knopf fehlt bei E-Mail-Sitzung');
+    const n = log.authorize.length;
+    await btn.click();
+    await until(page, () => true, null, { timeout: 500 }).catch(() => {});
+    await page.waitForTimeout(500);
+    ok(log.authorize.length === n + 1, 'Google-Weiterleitung nicht gestartet');
+    await ctx.close();
+  });
+
   await t('Abbruch bei Google ist kein Fehler: Anmeldefenster ohne Fehlermeldung, URL sauber', async () => {
     const { ctx, page, log } = await setup(browser, { mode: 'cancel' });
     await open(page); await loginModal(page).waitFor();
